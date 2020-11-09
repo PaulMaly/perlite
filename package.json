@@ -1,6 +1,6 @@
 {
   "name": "perlite",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -63,6 +63,7 @@
     "url": "git+https://github.com/PaulMaly/perlite.git"
   },
   "keywords": [
+    "reactive",
     "lit-html",
     "hyperactiv",
     "widgets"
@@ -70,7 +71,8 @@
   "bugs": {
     "url": "https://github.com/PaulMaly/perlite/issues"
   },
-  "homepage": "https://github.com/PaulMaly/perlite#readme",
+  "readme": "/docs/README.md",
+  "homepage": "https://github.com/PaulMaly/perlite/docs",
   "author": "Pavel Malyshev",
   "license": "MIT",
   "devDependencies": {
