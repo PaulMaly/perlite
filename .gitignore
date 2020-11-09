@@ -1,0 +1,8 @@
+/node_modules/
+/cypress/screenshots/
+.DS_Store
+.idea/
+.sessions/
+.vscode/
+Thumbs.db
+*.log

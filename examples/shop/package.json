@@ -1,0 +1,15 @@
+{
+  "name": "perlite-shop-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "sirv --dev ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "sirv-cli": "^1.0.8"
+  }
+}
