@@ -71,8 +71,8 @@
   "bugs": {
     "url": "https://github.com/PaulMaly/perlite/issues"
   },
-  "readme": "/docs/README.md",
-  "homepage": "https://github.com/PaulMaly/perlite/docs",
+  "readme": "https://github.com/PaulMaly/perlite/blob/main/docs/README.md",
+  "homepage": "https://github.com/PaulMaly/perlite#readme",
   "author": "Pavel Malyshev",
   "license": "MIT",
   "devDependencies": {
