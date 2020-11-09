@@ -1,6 +1,6 @@
 {
   "name": "perlite",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -54,13 +54,28 @@
       "path": "dist/perlite.min.mjs"
     }
   ],
+  "files": [
+    "src",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulMaly/perlite.git"
+  },
+  "keywords": [
+    "lit-html",
+    "hyperactiv",
+    "widgets"
+  ],
+  "bugs": {
+    "url": "https://github.com/PaulMaly/perlite/issues"
+  },
+  "homepage": "https://github.com/PaulMaly/perlite#readme",
   "author": "Pavel Malyshev",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.12.3",
-    "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
-    "@babel/runtime": "^7.12.5",
     "@rollup/plugin-babel": "^5.2.1",
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
