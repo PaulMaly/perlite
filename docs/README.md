@@ -1,6 +1,6 @@
 <div align="center">
 
-[![perlite logo](logo.svg)]()
+[![perlite logo](/docs/logo.svg)]()
 
 [![npm](https://img.shields.io/npm/v/perlite?style=flat-square)](https://www.npmjs.com/package/perlite)
 ![npm type definitions](https://img.shields.io/npm/types/perlite?style=flat-square)
