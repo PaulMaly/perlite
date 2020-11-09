@@ -1,6 +1,6 @@
 {
   "name": "perlite",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -71,7 +71,6 @@
   "bugs": {
     "url": "https://github.com/PaulMaly/perlite/issues"
   },
-  "readme": "https://github.com/PaulMaly/perlite/blob/main/docs/README.md",
   "homepage": "https://github.com/PaulMaly/perlite#readme",
   "author": "Pavel Malyshev",
   "license": "MIT",
