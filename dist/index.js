@@ -193,13 +193,13 @@
     const noop = () => { };
     const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
     const $ = (_a, ...context) => {
-        var { render: template = () => litHtml.nothing, state: getState = {}, target = document.body } = _a, options = __rest(_a, ["render", "state", "target"]);
-        const plainState = (typeof getState === 'function') ? getState(...context) : getState;
+        var { render: template = () => litHtml.nothing, state: data = {}, target = document.body } = _a, options = __rest(_a, ["render", "state", "target"]);
+        const model = (typeof data === 'function') ? data(...context) : data;
         Object.entries(target.dataset).forEach(([key, value]) => {
-            if (key in plainState)
-                plainState[key] = attrToVal(value);
+            if (key in model)
+                model[key] = attrToVal(value);
         });
-        const state = observe(plainState, Object.assign({ batch: true, deep: true, bind: true }, options));
+        const state = observe(model, Object.assign({ batch: true, deep: true, bind: true }, options));
         const emit = (name, detail, { bubbles = false, cancelable = true } = {}) => {
             target.dispatchEvent(new CustomEvent(name, { detail, bubbles, cancelable }));
         };
@@ -207,10 +207,10 @@
         const rerender = () => {
             litHtml.render(template(state, emit, ...context), target);
             if (!mounted) {
-                emit('mount', plainState);
+                emit('mount', model);
                 mounted = true;
             }
-            emit('update', plainState);
+            emit('update', model);
         };
         const renderer = computed(({ computeAsync }) => {
             if (mounted && !document.contains(target))
@@ -237,7 +237,7 @@
             effects.add(cancel);
             return cancel;
         };
-        const targetObserver = new MutationObserver((mutations) => {
+        const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.type !== 'attributes')
                     return;
@@ -253,8 +253,8 @@
                 }
             });
         });
-        targetObserver.observe(target, {
-            attributeFilter: Object.entries(plainState).reduce((attrs, [key, val]) => {
+        observer.observe(target, {
+            attributeFilter: Object.entries(model).reduce((attrs, [key, val]) => {
                 if (typeof val !== 'function') {
                     attrs.push(`data-${dashCase(key)}`);
                 }
@@ -266,8 +266,8 @@
             subtree: false
         });
         const destroy = () => {
-            emit('destroy', plainState);
-            targetObserver.disconnect();
+            emit('destroy', model);
+            observer.disconnect();
             dispose(renderer);
             effects.forEach((cancel) => cancel());
             effects.clear();
@@ -279,6 +279,7 @@
         return {
             on,
             ctx,
+            model,
             state,
             effect,
             target,
@@ -294,7 +295,9 @@
         const widgets = Array.prototype.map.call(target, (target) => {
             return $(Object.assign(Object.assign({}, config), { target }), ...context);
         });
-        return Object.assign(Object.assign({}, widgets), { effect: (...args) => widgets.map(widget => widget.effect(...args)), on: (...args) => widgets.map(widget => widget.on(...args)), destroy: () => widgets.forEach(widget => widget.destroy()), render: () => widgets.forEach(widget => widget.render()), state: fn => widgets.forEach(widget => fn(widget.state)), ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
+        return Object.assign(Object.assign({}, widgets), { effect: (fn, opts) => widgets.map((widget) => widget.effect(fn, opts)), on: (...args) => widgets.map((widget) => widget.on(...args)), destroy: () => widgets.forEach((widget) => widget.destroy()), render: () => widgets.forEach((widget) => widget.render()), state: (fn) => {
+                widgets.forEach((widget, index) => fn(widget.state, index));
+            }, ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
     };
 
     Object.keys(litHtml).forEach(function (k) {

@@ -6,5 +6,5 @@ export * from 'lit-html';
 export { observe, computed, dispose };
 export declare const noop: () => void;
 export declare const tick: (fn?: () => void) => Promise<void>;
-export declare const $: ({ render: template, state: getState, target, ...options }: Type.Config, ...context: any[]) => Type.Widget;
+export declare const $: ({ render: template, state: data, target, ...options }: Type.Config, ...context: any[]) => Type.Widget;
 export declare const $$: ({ target, ...config }: Type.Configs, ...context: any[]) => Type.Widgets;

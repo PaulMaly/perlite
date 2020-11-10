@@ -2935,13 +2935,13 @@ const { observe: observe$1, computed: computed$1, dispose: dispose$1 } = hr;
 const noop = () => { };
 const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
 const $ = (_a, ...context) => {
-    var { render: template = () => nothing, state: getState = {}, target = document.body } = _a, options = __rest(_a, ["render", "state", "target"]);
-    const plainState = (typeof getState === 'function') ? getState(...context) : getState;
+    var { render: template = () => nothing, state: data = {}, target = document.body } = _a, options = __rest(_a, ["render", "state", "target"]);
+    const model = (typeof data === 'function') ? data(...context) : data;
     Object.entries(target.dataset).forEach(([key, value]) => {
-        if (key in plainState)
-            plainState[key] = attrToVal(value);
+        if (key in model)
+            model[key] = attrToVal(value);
     });
-    const state = observe$1(plainState, Object.assign({ batch: true, deep: true, bind: true }, options));
+    const state = observe$1(model, Object.assign({ batch: true, deep: true, bind: true }, options));
     const emit = (name, detail, { bubbles = false, cancelable = true } = {}) => {
         target.dispatchEvent(new CustomEvent(name, { detail, bubbles, cancelable }));
     };
@@ -2949,10 +2949,10 @@ const $ = (_a, ...context) => {
     const rerender = () => {
         render(template(state, emit, ...context), target);
         if (!mounted) {
-            emit('mount', plainState);
+            emit('mount', model);
             mounted = true;
         }
-        emit('update', plainState);
+        emit('update', model);
     };
     const renderer = computed$1(({ computeAsync }) => {
         if (mounted && !document.contains(target))
@@ -2979,7 +2979,7 @@ const $ = (_a, ...context) => {
         effects.add(cancel);
         return cancel;
     };
-    const targetObserver = new MutationObserver((mutations) => {
+    const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.type !== 'attributes')
                 return;
@@ -2995,8 +2995,8 @@ const $ = (_a, ...context) => {
             }
         });
     });
-    targetObserver.observe(target, {
-        attributeFilter: Object.entries(plainState).reduce((attrs, [key, val]) => {
+    observer.observe(target, {
+        attributeFilter: Object.entries(model).reduce((attrs, [key, val]) => {
             if (typeof val !== 'function') {
                 attrs.push(`data-${dashCase(key)}`);
             }
@@ -3008,8 +3008,8 @@ const $ = (_a, ...context) => {
         subtree: false
     });
     const destroy = () => {
-        emit('destroy', plainState);
-        targetObserver.disconnect();
+        emit('destroy', model);
+        observer.disconnect();
         dispose$1(renderer);
         effects.forEach((cancel) => cancel());
         effects.clear();
@@ -3021,6 +3021,7 @@ const $ = (_a, ...context) => {
     return {
         on,
         ctx,
+        model,
         state,
         effect,
         target,
@@ -3036,7 +3037,9 @@ const $$ = (_a, ...context) => {
     const widgets = Array.prototype.map.call(target, (target) => {
         return $(Object.assign(Object.assign({}, config), { target }), ...context);
     });
-    return Object.assign(Object.assign({}, widgets), { effect: (...args) => widgets.map(widget => widget.effect(...args)), on: (...args) => widgets.map(widget => widget.on(...args)), destroy: () => widgets.forEach(widget => widget.destroy()), render: () => widgets.forEach(widget => widget.render()), state: fn => widgets.forEach(widget => fn(widget.state)), ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
+    return Object.assign(Object.assign({}, widgets), { effect: (fn, opts) => widgets.map((widget) => widget.effect(fn, opts)), on: (...args) => widgets.map((widget) => widget.on(...args)), destroy: () => widgets.forEach((widget) => widget.destroy()), render: () => widgets.forEach((widget) => widget.render()), state: (fn) => {
+            widgets.forEach((widget, index) => fn(widget.state, index));
+        }, ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
 };
 
 export { $, $$, AttributeCommitter, AttributePart, BooleanAttributePart, DefaultTemplateProcessor, EventPart, NodePart, PropertyCommitter, PropertyPart, SVGTemplateResult, Template, TemplateInstance, TemplateResult, asyncAppend, asyncReplace, bind, cache, call, capture, classMap, computed$1 as computed, createMarker, decorator, defaultTemplateProcessor, directive, dispose$1 as dispose, each, guard, html, ifDefined, isDirective, isIterable, isPrimitive, isTemplatePartActive, live, noChange, noop, nothing, observe$1 as observe, once, parts, passive, prevent, ref, removeNodes, render, reparentNodes, repeat, self, stop, styleMap, svg, templateCaches, templateContent, templateFactory, tick, unsafeHTML, unsafeSVG, until };
