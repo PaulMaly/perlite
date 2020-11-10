@@ -27,6 +27,8 @@ or
 yarn add perlite
 ```
 
+and use it
+
 ```javascript
 import { html } from 'perlite';
 ```
@@ -59,7 +61,7 @@ CDNs: [UNPKG](https://unpkg.com/perlite/) | [jsDelivr](https://cdn.jsdelivr.net/
 
 ### Widget declaration
 
-Widget basically is just a JS file containing `state` (object or function) and `render` function. Use ES6 [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) to describe your templates and [tag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates) them by scecial `html` function.
+Basically, the widget consists of two main parts:  `state` (object or function) and  `render` function. Use ES6 [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) to describe your templates and [tag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates) them by special `html` function imported from `perlite`.
 
 ```javascript
 import { html } from 'perlite';
@@ -69,13 +71,22 @@ export const state = {
 };
 
 export function render(state, emit) {
-    return html`<h1>Hello ${state.name}</h1>`
+    return html`
+        <h1>Hello ${state.name}</h1>
+    `
 }
 ```
 
 ### Widget creation
 
-To create a new widget and append into the page, import and call `$` constructor function and pass a `target` DOM element, where the widget will be rendered, and widget declaration using ES6 [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) for example:
+To create a new widget and append it to the page, import and call `$` constructor function and pass the config object with several properties:
+
+* `target` - DOM element where the widget will be rendered;
+* `state` - object or function representing the state for the widget;
+* `render` - a function representing a declarative template of the widget;
+* any [hyperactiv options](https://github.com/elbywan/hyperactiv#observe) for reactivity system (you __don't__ need to change the defaults in most cases)
+
+As an example, you can use ES6 [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) to pass widget declaration exports to the constructor.
 
 ```javascript
 import { $ } from 'perlite';
@@ -90,7 +101,7 @@ export const $helloWorld = $({
 
 The constructor function will return an object which allows you to manage a widget. To distinguish widgets from regular JS objects, it's recommended to follow the naming convention by prefixing widget names with the `$`. 
 
-Actually, the widget object is just a namespace without any overall context. So, you can use ES6 [Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) and use things separately:
+Actually, a widget object is just a namespace without any overall context. So, you can use ES6 [Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) and use things separately:
 
 ```javascript
 const { 
@@ -104,9 +115,9 @@ const {
 } = $helloWorld;
 ```
 
-## Widget multiple instantiations
+## Widget multiple instantiation
 
-Most often widget is a singleton, but in many cases, you need to use multiple widgets with the same declaration, but an isolated state. First of all, in its declaration instead of an object, you should use `state` function which should return a new state object. Otherwise, `state` will be shared between all widgets with the same declaration.
+Most often widget is a singleton, but in many cases, you need to use multiple widgets with the same declaration, but an isolated state. First of all, you need to use `state` function, instead of an object, in widget declaration. This function should return a new state object, otherwise, `state` will be shared between all widgets with the same declaration.
 
 ```javascript
 export function state() {
@@ -136,7 +147,7 @@ export const $helloWorld2 = $({
 
 ### Widget container
 
-When you deal with multiple widget instantiation, sometimes you want to work with them in the same manner. To do that, you can use the handy `$$` container function to work with a bunch of widgets at once:
+When you deal with multiple widget instantiations, sometimes you want to work with them in the same manner. To do that, you can use the handy `$$` container function to work with a bunch of widgets at once:
 
 ```javascript
 import { $$ } from 'perlite';
@@ -156,16 +167,16 @@ Widgets and widget containers have mostly the same APIs, but having specifics at
 ```javascript
 
 $widget.on('eventName', () => { ... }); // add event listener for the widget
-$widgets.on('eventName', () => { ... }); // add event listener for each widget in container
+$$widgets.on('eventName', () => { ... }); // add event listener for every widget in container
 
 $widget.effect(() => { ... }); // add effect for the widget
-$widgets.effect(() => { ... }); // add effect for each widget in container
+$$widgets.effect(() => { ... }); // add effect for every widget in container
 
 $widget.render(); // re-render the widget
-$widgets.render(); // re-render all widgets in container
+$$widgets.render(); // re-render all widgets in container
 
 $widget.destroy(); // destroy widget
-$$widgets.destroy(); // destroy ALL widgets in container
+$$widgets.destroy(); // destroy all widgets in container
 ```
 
 The other APIs looks the same, but should be used differently:

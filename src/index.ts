@@ -20,19 +20,19 @@ export const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve))
 export const $ = (
     {
         render: template = () => nothing,
-        state: getState = {},
+        state: data = {},
         target = document.body,
         ...options
     }: Type.Config,
     ...context
 ): Type.Widget => {
-    const plainState = (typeof getState === 'function') ? getState(...context) : getState;
+    const model = (typeof data === 'function') ? data(...context) : data;
 
     Object.entries(target.dataset).forEach(([key, value]) => {
-        if (key in plainState) plainState[key] = attrToVal(value);
+        if (key in model) model[key] = attrToVal(value);
     });
 
-    const state: Type.ReactiveState = observe(plainState, {
+    const state: Type.ReactiveState = observe(model, {
         batch: true,
         deep: true,
         bind: true,
@@ -49,10 +49,10 @@ export const $ = (
     const rerender = () => {
         render(template(state, emit, ...context), target);
         if (!mounted) {
-            emit('mount', plainState);
+            emit('mount', model);
             mounted = true;
         }
-        emit('update', plainState);
+        emit('update', model);
     };
     const renderer = computed(({ computeAsync }) => {
         if (mounted && !document.contains(target)) return destroy();
@@ -81,7 +81,7 @@ export const $ = (
         return cancel;
     };
 
-    const targetObserver = new MutationObserver((mutations: MutationRecord[]) => {
+    const observer = new MutationObserver((mutations: MutationRecord[]) => {
         mutations.forEach((mutation) => {
             if (mutation.type !== 'attributes') return;
 
@@ -98,8 +98,8 @@ export const $ = (
         });
     });
 
-    targetObserver.observe(target, {
-        attributeFilter: Object.entries(plainState).reduce((attrs, [key, val]) => {
+    observer.observe(target, {
+        attributeFilter: Object.entries(model).reduce((attrs, [key, val]) => {
             if (typeof val !== 'function') {
                 attrs.push(`data-${dashCase(key)}`);
             }
@@ -112,8 +112,8 @@ export const $ = (
     });
 
     const destroy = () => {
-        emit('destroy', plainState);
-        targetObserver.disconnect();
+        emit('destroy', model);
+        observer.disconnect();
         dispose(renderer);
         effects.forEach((cancel: () => any) => cancel());
         effects.clear();
@@ -127,7 +127,8 @@ export const $ = (
     return {
         on,
         ctx,
-        state,
+        model, // plain state (object)
+        state, // reactive state (proxy)
         effect,
         target,
         destroy,
@@ -146,11 +147,13 @@ export const $$ = ({ target, ...config }: Type.Configs, ...context): Type.Widget
 
     return {
         ...widgets,
-        effect: (...args) => widgets.map(widget => widget.effect(...args)),
-        on: (...args) => widgets.map(widget => widget.on(...args)),
-        destroy: () => widgets.forEach(widget => widget.destroy()),
-        render: () => widgets.forEach(widget => widget.render()),
-        state: fn => widgets.forEach(widget => fn(widget.state)),
+        effect: (fn, opts): [] => widgets.map((widget: Type.Widget) => widget.effect(fn, opts)),
+        on: (...args): [] => widgets.map((widget: Type.Widget) => widget.on(...args)),
+        destroy: (): void => widgets.forEach((widget: Type.Widget) => widget.destroy()),
+        render: (): void => widgets.forEach((widget: Type.Widget) => widget.render()),
+        state: (fn: (state: Type.ReactiveState, index: number) => void) => {
+            widgets.forEach((widget: Type.Widget, index: number) => fn(widget.state, index))
+        },
         ctx: (fn: (...ctx: any[]) => any) => fn(...context),
         forEach: Array.prototype.forEach.bind(widgets),
         target
