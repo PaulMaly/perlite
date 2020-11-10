@@ -1,6 +1,6 @@
-import products from '../stores/products.js';
+import { html, each } from 'https://unpkg.com/perlite@latest/dist/perlite.min.mjs';
 
-const { html, each } = perlite;
+import products from '../stores/products.js';
 
 export function state() {
     return {

@@ -1,4 +1,4 @@
-const { html, bind } = perlite;
+import { html, bind } from 'https://unpkg.com/perlite@latest/dist/perlite.min.mjs';
 
 export function state() {
     return {

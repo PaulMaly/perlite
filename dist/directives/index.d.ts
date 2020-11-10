@@ -14,7 +14,6 @@ export * from 'lit-html/directives/unsafe-svg';
 export * from './each';
 export * from './ref';
 export * from './decorator';
-export * from './transition';
 export * from './bind';
 export * from './call';
 export * from './capture';

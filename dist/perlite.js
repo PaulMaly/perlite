@@ -1680,6 +1680,34 @@ var perlite = (function (exports) {
 
     const svg = (strings, ...values) => new SVGTemplateResult(strings, values, 'svg', defaultTemplateProcessor);
 
+    function attrToVal(str) {
+        if (str === 'true' || str === 'false') {
+            return str === 'true';
+        }
+        else if (str === 'null') {
+            return null;
+        }
+        else if (str === 'undefined') {
+            return undefined;
+        }
+        else if (str !== '' && !isNaN(Number(str))) {
+            return Number(str);
+        }
+        else {
+            try {
+                return JSON.parse(str);
+            }
+            catch (e) { }
+        }
+        return str;
+    }
+    function camelCase(str) {
+        return str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+    }
+    function dashCase(str) {
+        return str.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
+    }
+
     /**
      * @license
      * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
@@ -3102,9 +3130,6 @@ var perlite = (function (exports) {
         return self;
     });
 
-    const transition = directive((fn) => (part) => {
-    });
-
     const bind = directive((handleEvent) => (part) => {
         if (!(part instanceof EventPart)) {
             throw new Error('"bind" directive can only be used in event listeners');
@@ -3205,12 +3230,14 @@ var perlite = (function (exports) {
     });
 
     const { observe: observe$1, computed: computed$1, dispose: dispose$1 } = hr;
+    const noop = () => { };
+    const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
     const $ = (_a, ...context) => {
         var { render: template = () => nothing, state: getState = {}, target = document.body } = _a, options = __rest(_a, ["render", "state", "target"]);
         const plainState = (typeof getState === 'function') ? getState(...context) : getState;
         Object.entries(target.dataset).forEach(([key, value]) => {
             if (key in plainState)
-                plainState[key] = attrToType(value);
+                plainState[key] = attrToVal(value);
         });
         const state = observe$1(plainState, Object.assign({ batch: true, deep: true, bind: true }, options));
         const emit = (name, detail, { bubbles = false, cancelable = true } = {}) => {
@@ -3255,13 +3282,12 @@ var perlite = (function (exports) {
                 if (mutation.type !== 'attributes')
                     return;
                 const el = mutation.target;
-                const key = mutation.attributeName.replace('data-', '')
-                    .replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+                const key = camelCase(mutation.attributeName.replace('data-', ''));
                 if (!(key in state))
                     return;
                 const value = el.getAttribute(mutation.attributeName);
                 if (value !== mutation.oldValue) {
-                    const val = attrToType(value);
+                    const val = attrToVal(value);
                     if (state[key] !== val)
                         state[key] = val;
                 }
@@ -3270,7 +3296,7 @@ var perlite = (function (exports) {
         targetObserver.observe(target, {
             attributeFilter: Object.entries(plainState).reduce((attrs, [key, val]) => {
                 if (typeof val !== 'function') {
-                    attrs.push(`data-${key.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase())}`);
+                    attrs.push(`data-${dashCase(key)}`);
                 }
                 return attrs;
             }, []),
@@ -3310,29 +3336,6 @@ var perlite = (function (exports) {
         });
         return Object.assign(Object.assign({}, widgets), { effect: (...args) => widgets.map(widget => widget.effect(...args)), on: (...args) => widgets.map(widget => widget.on(...args)), destroy: () => widgets.forEach(widget => widget.destroy()), render: () => widgets.forEach(widget => widget.render()), state: fn => widgets.forEach(widget => fn(widget.state)), ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
     };
-    const noop = () => { };
-    const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
-    function attrToType(val) {
-        if (val === 'true' || val === 'false') {
-            return val === 'true';
-        }
-        else if (val === 'null') {
-            return null;
-        }
-        else if (val === 'undefined') {
-            return undefined;
-        }
-        else if (val !== '' && !isNaN(Number(val))) {
-            return Number(val);
-        }
-        else {
-            try {
-                val = JSON.parse(val);
-            }
-            catch (e) { }
-        }
-        return val;
-    }
 
     exports.$ = $;
     exports.$$ = $$;
@@ -3350,7 +3353,6 @@ var perlite = (function (exports) {
     exports.TemplateResult = TemplateResult;
     exports.asyncAppend = asyncAppend;
     exports.asyncReplace = asyncReplace;
-    exports.attrToType = attrToType;
     exports.bind = bind;
     exports.cache = cache;
     exports.call = call;
@@ -3392,7 +3394,6 @@ var perlite = (function (exports) {
     exports.templateContent = templateContent;
     exports.templateFactory = templateFactory;
     exports.tick = tick;
-    exports.transition = transition;
     exports.unsafeHTML = unsafeHTML;
     exports.unsafeSVG = unsafeSVG;
     exports.until = until;

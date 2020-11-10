@@ -1,7 +1,7 @@
+import { computed } from 'https://unpkg.com/perlite@latest/dist/perlite.min.mjs';
+
 import { $$addToCart, $cartPopup, $search } from './widgets/index.js';
 import products from './stores/products.js';
-
-const { computed } = perlite;
 
 computed(() => {
     products && $cartPopup.render();

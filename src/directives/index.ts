@@ -19,7 +19,7 @@ export * from './each';
 // dom elements ref & decorator
 export * from './ref';
 export * from './decorator';
-export * from './transition';
+//export * from './transition'; // WIP
 
 // passing state to event listener
 export * from './bind';

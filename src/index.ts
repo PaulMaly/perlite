@@ -1,6 +1,8 @@
 import hr from 'hyperactiv';
 import { render, nothing } from 'lit-html';
 
+import { attrToVal, camelCase, dashCase } from './utils';
+
 import type * as Type from './types';
 
 const { observe, computed, dispose } = hr;
@@ -10,6 +12,10 @@ export * from './directives';
 export * from 'lit-html';
 
 export { observe, computed, dispose };
+
+export const noop = () => { };
+
+export const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
 
 export const $ = (
     {
@@ -23,7 +29,7 @@ export const $ = (
     const plainState = (typeof getState === 'function') ? getState(...context) : getState;
 
     Object.entries(target.dataset).forEach(([key, value]) => {
-        if (key in plainState) plainState[key] = attrToType(value);
+        if (key in plainState) plainState[key] = attrToVal(value);
     });
 
     const state: Type.ReactiveState = observe(plainState, {
@@ -80,13 +86,13 @@ export const $ = (
             if (mutation.type !== 'attributes') return;
 
             const el: Element = mutation.target as Element;
-            const key = mutation.attributeName.replace('data-', '')
-                .replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+            const key = camelCase(mutation.attributeName.replace('data-', ''));
+
             if (!(key in state)) return;
 
             const value = el.getAttribute(mutation.attributeName);
             if (value !== mutation.oldValue) {
-                const val = attrToType(value);
+                const val = attrToVal(value);
                 if (state[key] !== val) state[key] = val;
             }
         });
@@ -95,9 +101,7 @@ export const $ = (
     targetObserver.observe(target, {
         attributeFilter: Object.entries(plainState).reduce((attrs, [key, val]) => {
             if (typeof val !== 'function') {
-                attrs.push(
-                    `data-${key.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase())}`
-                );
+                attrs.push(`data-${dashCase(key)}`);
             }
             return attrs;
         }, []),
@@ -152,24 +156,3 @@ export const $$ = ({ target, ...config }: Type.Configs, ...context): Type.Widget
         target
     };
 };
-
-export const noop = () => { };
-
-export const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
-
-export function attrToType(val) {
-    if (val === 'true' || val === 'false') {
-        return val === 'true';
-    } else if (val === 'null') {
-        return null;
-    } else if (val === 'undefined') {
-        return undefined;
-    } else if (val !== '' && !isNaN(Number(val))) {
-        return Number(val);
-    } else {
-        try {
-            val = JSON.parse(val);
-        } catch (e) { }
-    }
-    return val;
-}

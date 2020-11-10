@@ -35,6 +35,34 @@
         return t;
     }
 
+    function attrToVal(str) {
+        if (str === 'true' || str === 'false') {
+            return str === 'true';
+        }
+        else if (str === 'null') {
+            return null;
+        }
+        else if (str === 'undefined') {
+            return undefined;
+        }
+        else if (str !== '' && !isNaN(Number(str))) {
+            return Number(str);
+        }
+        else {
+            try {
+                return JSON.parse(str);
+            }
+            catch (e) { }
+        }
+        return str;
+    }
+    function camelCase(str) {
+        return str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+    }
+    function dashCase(str) {
+        return str.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
+    }
+
     const each = (items, template, keyFn = (item) => item) => repeat.repeat(items, keyFn, template);
 
     const ref = litHtml.directive((fn) => (part) => fn(part.element));
@@ -60,9 +88,6 @@
             }
         };
         return self;
-    });
-
-    const transition = litHtml.directive((fn) => (part) => {
     });
 
     const bind = litHtml.directive((handleEvent) => (part) => {
@@ -165,12 +190,14 @@
     });
 
     const { observe, computed, dispose } = hr__default['default'];
+    const noop = () => { };
+    const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
     const $ = (_a, ...context) => {
         var { render: template = () => litHtml.nothing, state: getState = {}, target = document.body } = _a, options = __rest(_a, ["render", "state", "target"]);
         const plainState = (typeof getState === 'function') ? getState(...context) : getState;
         Object.entries(target.dataset).forEach(([key, value]) => {
             if (key in plainState)
-                plainState[key] = attrToType(value);
+                plainState[key] = attrToVal(value);
         });
         const state = observe(plainState, Object.assign({ batch: true, deep: true, bind: true }, options));
         const emit = (name, detail, { bubbles = false, cancelable = true } = {}) => {
@@ -215,13 +242,12 @@
                 if (mutation.type !== 'attributes')
                     return;
                 const el = mutation.target;
-                const key = mutation.attributeName.replace('data-', '')
-                    .replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+                const key = camelCase(mutation.attributeName.replace('data-', ''));
                 if (!(key in state))
                     return;
                 const value = el.getAttribute(mutation.attributeName);
                 if (value !== mutation.oldValue) {
-                    const val = attrToType(value);
+                    const val = attrToVal(value);
                     if (state[key] !== val)
                         state[key] = val;
                 }
@@ -230,7 +256,7 @@
         targetObserver.observe(target, {
             attributeFilter: Object.entries(plainState).reduce((attrs, [key, val]) => {
                 if (typeof val !== 'function') {
-                    attrs.push(`data-${key.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase())}`);
+                    attrs.push(`data-${dashCase(key)}`);
                 }
                 return attrs;
             }, []),
@@ -270,29 +296,6 @@
         });
         return Object.assign(Object.assign({}, widgets), { effect: (...args) => widgets.map(widget => widget.effect(...args)), on: (...args) => widgets.map(widget => widget.on(...args)), destroy: () => widgets.forEach(widget => widget.destroy()), render: () => widgets.forEach(widget => widget.render()), state: fn => widgets.forEach(widget => fn(widget.state)), ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
     };
-    const noop = () => { };
-    const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
-    function attrToType(val) {
-        if (val === 'true' || val === 'false') {
-            return val === 'true';
-        }
-        else if (val === 'null') {
-            return null;
-        }
-        else if (val === 'undefined') {
-            return undefined;
-        }
-        else if (val !== '' && !isNaN(Number(val))) {
-            return Number(val);
-        }
-        else {
-            try {
-                val = JSON.parse(val);
-            }
-            catch (e) { }
-        }
-        return val;
-    }
 
     Object.keys(litHtml).forEach(function (k) {
         if (k !== 'default') Object.defineProperty(exports, k, {
@@ -408,7 +411,6 @@
     });
     exports.$ = $;
     exports.$$ = $$;
-    exports.attrToType = attrToType;
     exports.bind = bind;
     exports.call = call;
     exports.capture = capture;
@@ -425,7 +427,6 @@
     exports.self = self;
     exports.stop = stop;
     exports.tick = tick;
-    exports.transition = transition;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

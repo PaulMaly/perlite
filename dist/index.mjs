@@ -43,6 +43,34 @@ function __rest(s, e) {
     return t;
 }
 
+function attrToVal(str) {
+    if (str === 'true' || str === 'false') {
+        return str === 'true';
+    }
+    else if (str === 'null') {
+        return null;
+    }
+    else if (str === 'undefined') {
+        return undefined;
+    }
+    else if (str !== '' && !isNaN(Number(str))) {
+        return Number(str);
+    }
+    else {
+        try {
+            return JSON.parse(str);
+        }
+        catch (e) { }
+    }
+    return str;
+}
+function camelCase(str) {
+    return str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+}
+function dashCase(str) {
+    return str.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
+}
+
 const each = (items, template, keyFn = (item) => item) => repeat$1(items, keyFn, template);
 
 const ref = directive((fn) => (part) => fn(part.element));
@@ -68,9 +96,6 @@ const decorator = directive((handler, ...state) => {
         }
     };
     return self;
-});
-
-const transition = directive((fn) => (part) => {
 });
 
 const bind = directive((handleEvent) => (part) => {
@@ -173,12 +198,14 @@ const self = directive((handleEvent) => (part) => {
 });
 
 const { observe, computed, dispose } = hr;
+const noop = () => { };
+const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
 const $ = (_a, ...context) => {
     var { render: template = () => nothing, state: getState = {}, target = document.body } = _a, options = __rest(_a, ["render", "state", "target"]);
     const plainState = (typeof getState === 'function') ? getState(...context) : getState;
     Object.entries(target.dataset).forEach(([key, value]) => {
         if (key in plainState)
-            plainState[key] = attrToType(value);
+            plainState[key] = attrToVal(value);
     });
     const state = observe(plainState, Object.assign({ batch: true, deep: true, bind: true }, options));
     const emit = (name, detail, { bubbles = false, cancelable = true } = {}) => {
@@ -223,13 +250,12 @@ const $ = (_a, ...context) => {
             if (mutation.type !== 'attributes')
                 return;
             const el = mutation.target;
-            const key = mutation.attributeName.replace('data-', '')
-                .replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+            const key = camelCase(mutation.attributeName.replace('data-', ''));
             if (!(key in state))
                 return;
             const value = el.getAttribute(mutation.attributeName);
             if (value !== mutation.oldValue) {
-                const val = attrToType(value);
+                const val = attrToVal(value);
                 if (state[key] !== val)
                     state[key] = val;
             }
@@ -238,7 +264,7 @@ const $ = (_a, ...context) => {
     targetObserver.observe(target, {
         attributeFilter: Object.entries(plainState).reduce((attrs, [key, val]) => {
             if (typeof val !== 'function') {
-                attrs.push(`data-${key.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase())}`);
+                attrs.push(`data-${dashCase(key)}`);
             }
             return attrs;
         }, []),
@@ -278,28 +304,5 @@ const $$ = (_a, ...context) => {
     });
     return Object.assign(Object.assign({}, widgets), { effect: (...args) => widgets.map(widget => widget.effect(...args)), on: (...args) => widgets.map(widget => widget.on(...args)), destroy: () => widgets.forEach(widget => widget.destroy()), render: () => widgets.forEach(widget => widget.render()), state: fn => widgets.forEach(widget => fn(widget.state)), ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
 };
-const noop = () => { };
-const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
-function attrToType(val) {
-    if (val === 'true' || val === 'false') {
-        return val === 'true';
-    }
-    else if (val === 'null') {
-        return null;
-    }
-    else if (val === 'undefined') {
-        return undefined;
-    }
-    else if (val !== '' && !isNaN(Number(val))) {
-        return Number(val);
-    }
-    else {
-        try {
-            val = JSON.parse(val);
-        }
-        catch (e) { }
-    }
-    return val;
-}
 
-export { $, $$, attrToType, bind, call, capture, computed, decorator, dispose, each, noop, observe, once, passive, prevent, ref, self, stop, tick, transition };
+export { $, $$, bind, call, capture, computed, decorator, dispose, each, noop, observe, once, passive, prevent, ref, self, stop, tick };
