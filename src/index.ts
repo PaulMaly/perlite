@@ -147,12 +147,12 @@ export const $$ = ({ target, ...config }: Type.Configs, ...context): Type.Widget
 
     return {
         ...widgets,
-        effect: (fn, opts): [] => widgets.map((widget: Type.Widget) => widget.effect(fn, opts)),
+        effect: (fn, opts): [] => widgets.map((widget: Type.Widget) => widget.effect(fn(widget.state), opts)),
         on: (...args): [] => widgets.map((widget: Type.Widget) => widget.on(...args)),
         destroy: (): void => widgets.forEach((widget: Type.Widget) => widget.destroy()),
         render: (): void => widgets.forEach((widget: Type.Widget) => widget.render()),
-        state: (fn: (state: Type.ReactiveState, index: number) => void) => {
-            widgets.forEach((widget: Type.Widget, index: number) => fn(widget.state, index))
+        state: (fn: (state: Type.ReactiveState) => void): void => {
+            widgets.forEach((widget: Type.Widget) => fn(widget.state))
         },
         ctx: (fn: (...ctx: any[]) => any) => fn(...context),
         forEach: Array.prototype.forEach.bind(widgets),

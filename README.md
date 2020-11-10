@@ -82,7 +82,7 @@ export function render(state, emit) {
 To create a new widget and append it to the page, import and call `$` constructor function and pass the config object with several properties:
 
 * `target` - DOM element where the widget will be rendered;
-* `state` - object or function representing the state for the widget;
+* `state` - object or function representing the state of the widget;
 * `render` - a function representing a declarative template of the widget;
 * any [hyperactiv options](https://github.com/elbywan/hyperactiv#observe) for reactivity system (you __don't__ need to change the defaults in most cases)
 
@@ -127,7 +127,7 @@ export function state() {
 }
 ```
 
-After that, you can use `$` function multiple times with the different `targets`:
+After that, you can call `$` function multiple times with the different `targets`:
 
 ```javascript
 import { $ } from 'perlite';
@@ -169,9 +169,6 @@ Widgets and widget containers have mostly the same APIs, but having specifics at
 $widget.on('eventName', () => { ... }); // add event listener for the widget
 $$widgets.on('eventName', () => { ... }); // add event listener for every widget in container
 
-$widget.effect(() => { ... }); // add effect for the widget
-$$widgets.effect(() => { ... }); // add effect for every widget in container
-
 $widget.render(); // re-render the widget
 $$widgets.render(); // re-render all widgets in container
 
@@ -184,9 +181,12 @@ The other APIs looks the same, but should be used differently:
 ```javascript
 $widget.state.foo = 1; // directly change the state of the widget
 
-$$widgets.state((state$) => { // use it as a function with callback
+$$widgets.state(state$ => { // use it as a function with callback
     state$.foo = 1;
 });
+
+$widget.effect(() => { ... }); // add effect for the widget
+$$widgets.effect(state$ => () => { ... }); // add effect for every widget in container
 ```
 
 Also, you can iterate through the container using `forEach`:

@@ -3037,8 +3037,8 @@ const $$ = (_a, ...context) => {
     const widgets = Array.prototype.map.call(target, (target) => {
         return $(Object.assign(Object.assign({}, config), { target }), ...context);
     });
-    return Object.assign(Object.assign({}, widgets), { effect: (fn, opts) => widgets.map((widget) => widget.effect(fn, opts)), on: (...args) => widgets.map((widget) => widget.on(...args)), destroy: () => widgets.forEach((widget) => widget.destroy()), render: () => widgets.forEach((widget) => widget.render()), state: (fn) => {
-            widgets.forEach((widget, index) => fn(widget.state, index));
+    return Object.assign(Object.assign({}, widgets), { effect: (fn, opts) => widgets.map((widget) => widget.effect(fn(widget.state), opts)), on: (...args) => widgets.map((widget) => widget.on(...args)), destroy: () => widgets.forEach((widget) => widget.destroy()), render: () => widgets.forEach((widget) => widget.render()), state: (fn) => {
+            widgets.forEach((widget) => fn(widget.state));
         }, ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
 };
 
