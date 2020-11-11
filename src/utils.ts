@@ -1,3 +1,7 @@
+export const noop = () => { };
+
+export const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
+
 export function attrToVal(str) {
     if (str === 'true' || str === 'false') {
         return str === 'true';

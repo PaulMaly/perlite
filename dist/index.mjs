@@ -43,6 +43,8 @@ function __rest(s, e) {
     return t;
 }
 
+const noop = () => { };
+const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
 function attrToVal(str) {
     if (str === 'true' || str === 'false') {
         return str === 'true';
@@ -198,8 +200,6 @@ const self = directive((handleEvent) => (part) => {
 });
 
 const { observe, computed, dispose } = hr;
-const noop = () => { };
-const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
 const $ = (_a, ...context) => {
     var { render: template = () => nothing, state: data = {}, target = document.body } = _a, options = __rest(_a, ["render", "state", "target"]);
     const model = (typeof data === 'function') ? data(...context) : data;
@@ -308,4 +308,4 @@ const $$ = (_a, ...context) => {
         }, ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
 };
 
-export { $, $$, bind, call, capture, computed, decorator, dispose, each, noop, observe, once, passive, prevent, ref, self, stop, tick };
+export { $, $$, attrToVal, bind, call, camelCase, capture, computed, dashCase, decorator, dispose, each, noop, observe, once, passive, prevent, ref, self, stop, tick };

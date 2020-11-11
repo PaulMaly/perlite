@@ -7,15 +7,12 @@ import type * as Type from './types';
 
 const { observe, computed, dispose } = hr;
 
+export * from './utils';
 export * from './types';
 export * from './directives';
 export * from 'lit-html';
 
 export { observe, computed, dispose };
-
-export const noop = () => { };
-
-export const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
 
 export const $ = (
     {

@@ -35,6 +35,8 @@
         return t;
     }
 
+    const noop = () => { };
+    const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
     function attrToVal(str) {
         if (str === 'true' || str === 'false') {
             return str === 'true';
@@ -190,8 +192,6 @@
     });
 
     const { observe, computed, dispose } = hr__default['default'];
-    const noop = () => { };
-    const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
     const $ = (_a, ...context) => {
         var { render: template = () => litHtml.nothing, state: data = {}, target = document.body } = _a, options = __rest(_a, ["render", "state", "target"]);
         const model = (typeof data === 'function') ? data(...context) : data;
@@ -414,10 +414,13 @@
     });
     exports.$ = $;
     exports.$$ = $$;
+    exports.attrToVal = attrToVal;
     exports.bind = bind;
     exports.call = call;
+    exports.camelCase = camelCase;
     exports.capture = capture;
     exports.computed = computed;
+    exports.dashCase = dashCase;
     exports.decorator = decorator;
     exports.dispose = dispose;
     exports.each = each;

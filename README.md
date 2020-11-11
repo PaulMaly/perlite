@@ -9,9 +9,54 @@
 
 Perlite is a **simple** and **declarative** way to create rich client-side widgets designed with server-side apps in mind. Completely based on native/vanilla Javascript standards and doesn't require additional build steps or compilation.
 
-## 🚩 Table of Contents
+## 🚩 Table of contents
 
-## 🎨 Features
+- [Features](https://github.com/PaulMaly/perlite#-features).
+- [Installation](https://github.com/PaulMaly/perlite#-installation)
+- [Installation](https://github.com/PaulMaly/perlite#-installation)
+    - [NPM](https://github.com/PaulMaly/perlite#npm)
+    - [CDN](https://github.com/PaulMaly/perlite#cdn)
+- [Basic usage](https://github.com/PaulMaly/perlite#-basic-usage)
+    - [Widget declaration](https://github.com/PaulMaly/perlite#widget-declaration)
+    - [Widget creation](https://github.com/PaulMaly/perlite#widget-creation)
+    - [Widget multiple instantiation](https://github.com/PaulMaly/perlite#widget-multiple-instantiation)
+    - [Widget container](https://github.com/PaulMaly/perlite#widget-container)
+    - [Widget state](https://github.com/PaulMaly/perlite#widget-state)
+        - [Reactivity system]()
+    - [Widget template](https://github.com/PaulMaly/perlite#widget-template)
+        - [Template syntax]()
+        - [Using expressions]()
+        - [Text bindings]()
+        - [Attribute bindings]()
+        - [Event listeners]()
+        - [Template fragments]()
+        - [Control flow]()
+            - [Conditions]()
+            - [Looping]()
+    - [Widget API](https://github.com/PaulMaly/perlite#widget-api)
+        - [$widget.target]()
+        - [$widget.state]()
+        - [$widget.model]()
+        - [$widget.effect(callback)]()
+        - [$widget.on(type, listener [, options])]()
+        - [$widget.render()]()
+        - [$widget.destroy()]()
+        - [$widget.ctx(callback)]()
+    - [Widget container API](https://github.com/PaulMaly/perlite#widget-container-api)
+- [Advanced usage](https://github.com/PaulMaly/perlite#-advanced-usage)
+    - [Directives](https://github.com/PaulMaly/perlite#directives)
+    - [Custom directive](https://github.com/PaulMaly/perlite#custom-directives)
+    - [Widget context](https://github.com/PaulMaly/perlite#widget-context)
+    - [Widget nesting](https://github.com/PaulMaly/perlite#widget-nesting)
+    - [Global state](https://github.com/PaulMaly/perlite#global-state)
+    - [Styling](https://github.com/PaulMaly/perlite#styling)
+    - [Transitions](https://github.com/PaulMaly/perlite#transitions)
+    - [Utilities](https://github.com/PaulMaly/perlite#utilities)
+- [Typescript support](https://github.com/PaulMaly/perlite#-typescript-support)
+- [Browsers support](https://github.com/PaulMaly/perlite#-browsers-support)
+- [License](https://github.com/PaulMaly/perlite#-license)
+
+## 📋 Features
 
 ## 📦 Installation
 
@@ -57,7 +102,7 @@ const { html } = window.perlite;
 
 CDNs: [UNPKG](https://unpkg.com/perlite/) | [jsDelivr](https://cdn.jsdelivr.net/npm/perlite/).
 
-## 🔨 Basic Usage
+## 🔨 Basic usage
 
 ### Widget declaration
 
@@ -115,7 +160,7 @@ const {
 } = $helloWorld;
 ```
 
-## Widget multiple instantiation
+### Widget multiple instantiation
 
 Most often widget is a singleton, but in many cases, you need to use multiple widgets with the same declaration, but an isolated state. First of all, you need to use `state` function, instead of an object, in widget declaration. This function should return a new state object, otherwise, `state` will be shared between all widgets with the same declaration.
 
@@ -196,6 +241,96 @@ $$widgets.forEach(widget => {
     // do your custom logic with each widget
 });
 ```
+
+### Widget state
+
+WIP
+
+#### Reactivity system
+
+### Widget template
+
+WIP
+
+#### Template syntax
+
+#### Using expressions
+
+#### Text bindings
+
+#### Attribute bindings
+
+#### Event listeners
+
+#### Template fragments
+
+#### Control flow
+
+##### Conditions
+
+##### Looping
+
+### Widget API
+
+WIP
+
+#### $widget.target
+
+#### $widget.state
+
+#### $widget.model
+
+#### $widget.effect(callback)
+
++ `callback`: function
+
+#### $widget.on(type, listener [, options])
+
++ `type`: string
++ `listener`: function
++ `options`: object
+
+#### $widget.render()
+
+#### $widget.destroy()
+
+#### $widget.ctx(callback)
+
++ `callback`: function
+
+### Widget container API
+
+## 🛠 Advanced usage
+
+WIP
+
+### Directives
+
+#### Lit-html directives
+
+#### Lists & keys
+
+#### Event listener modifiers
+
+#### Refs & decorators
+
+### Custom directive
+
+### Widget context
+
+### Widget nesting
+
+### Global state
+
+### Styling
+
+### Transitions
+
+### Utilities
+
+## ⌨️ Typescript support
+
+## 🌐 Browsers support
 
 ## 📜 License
 
