@@ -37,6 +37,31 @@
 
     const noop = () => { };
     const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
+    const memo = (fn, invalidate) => {
+        const cache = new Map();
+        return (...args) => {
+            let key;
+            if (typeof invalidate === 'function') {
+                const validOrKey = invalidate.apply(fn, args);
+                if (validOrKey === false) {
+                    key = JSON.stringify(args);
+                    cache.delete(key);
+                }
+                else if (validOrKey !== true) {
+                    key = validOrKey;
+                }
+            }
+            if (key !== undefined) {
+                key = JSON.stringify(args);
+            }
+            if (cache.has(key)) {
+                return cache.get(key);
+            }
+            const result = fn.apply(fn, args);
+            cache.set(key, result);
+            return result;
+        };
+    };
     function attrToVal(str) {
         if (str === 'true' || str === 'false') {
             return str === 'true';
@@ -424,6 +449,7 @@
     exports.decorator = decorator;
     exports.dispose = dispose;
     exports.each = each;
+    exports.memo = memo;
     exports.noop = noop;
     exports.observe = observe;
     exports.once = once;

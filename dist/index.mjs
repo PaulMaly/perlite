@@ -45,6 +45,31 @@ function __rest(s, e) {
 
 const noop = () => { };
 const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
+const memo = (fn, invalidate) => {
+    const cache = new Map();
+    return (...args) => {
+        let key;
+        if (typeof invalidate === 'function') {
+            const validOrKey = invalidate.apply(fn, args);
+            if (validOrKey === false) {
+                key = JSON.stringify(args);
+                cache.delete(key);
+            }
+            else if (validOrKey !== true) {
+                key = validOrKey;
+            }
+        }
+        if (key !== undefined) {
+            key = JSON.stringify(args);
+        }
+        if (cache.has(key)) {
+            return cache.get(key);
+        }
+        const result = fn.apply(fn, args);
+        cache.set(key, result);
+        return result;
+    };
+};
 function attrToVal(str) {
     if (str === 'true' || str === 'false') {
         return str === 'true';
@@ -308,4 +333,4 @@ const $$ = (_a, ...context) => {
         }, ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
 };
 
-export { $, $$, attrToVal, bind, call, camelCase, capture, computed, dashCase, decorator, dispose, each, noop, observe, once, passive, prevent, ref, self, stop, tick };
+export { $, $$, attrToVal, bind, call, camelCase, capture, computed, dashCase, decorator, dispose, each, memo, noop, observe, once, passive, prevent, ref, self, stop, tick };

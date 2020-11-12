@@ -1516,6 +1516,31 @@ const svg = (strings, ...values) => new SVGTemplateResult(strings, values, 'svg'
 
 const noop = () => { };
 const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
+const memo = (fn, invalidate) => {
+    const cache = new Map();
+    return (...args) => {
+        let key;
+        if (typeof invalidate === 'function') {
+            const validOrKey = invalidate.apply(fn, args);
+            if (validOrKey === false) {
+                key = JSON.stringify(args);
+                cache.delete(key);
+            }
+            else if (validOrKey !== true) {
+                key = validOrKey;
+            }
+        }
+        if (key !== undefined) {
+            key = JSON.stringify(args);
+        }
+        if (cache.has(key)) {
+            return cache.get(key);
+        }
+        const result = fn.apply(fn, args);
+        cache.set(key, result);
+        return result;
+    };
+};
 function attrToVal(str) {
     if (str === 'true' || str === 'false') {
         return str === 'true';
@@ -3042,4 +3067,4 @@ const $$ = (_a, ...context) => {
         }, ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
 };
 
-export { $, $$, AttributeCommitter, AttributePart, BooleanAttributePart, DefaultTemplateProcessor, EventPart, NodePart, PropertyCommitter, PropertyPart, SVGTemplateResult, Template, TemplateInstance, TemplateResult, asyncAppend, asyncReplace, attrToVal, bind, cache, call, camelCase, capture, classMap, computed$1 as computed, createMarker, dashCase, decorator, defaultTemplateProcessor, directive, dispose$1 as dispose, each, guard, html, ifDefined, isDirective, isIterable, isPrimitive, isTemplatePartActive, live, noChange, noop, nothing, observe$1 as observe, once, parts, passive, prevent, ref, removeNodes, render, reparentNodes, repeat, self, stop, styleMap, svg, templateCaches, templateContent, templateFactory, tick, unsafeHTML, unsafeSVG, until };
+export { $, $$, AttributeCommitter, AttributePart, BooleanAttributePart, DefaultTemplateProcessor, EventPart, NodePart, PropertyCommitter, PropertyPart, SVGTemplateResult, Template, TemplateInstance, TemplateResult, asyncAppend, asyncReplace, attrToVal, bind, cache, call, camelCase, capture, classMap, computed$1 as computed, createMarker, dashCase, decorator, defaultTemplateProcessor, directive, dispose$1 as dispose, each, guard, html, ifDefined, isDirective, isIterable, isPrimitive, isTemplatePartActive, live, memo, noChange, noop, nothing, observe$1 as observe, once, parts, passive, prevent, ref, removeNodes, render, reparentNodes, repeat, self, stop, styleMap, svg, templateCaches, templateContent, templateFactory, tick, unsafeHTML, unsafeSVG, until };

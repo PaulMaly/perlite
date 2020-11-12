@@ -24,6 +24,7 @@ Perlite is a **simple** and **declarative** way to create rich client-side widge
     - [Widget state](https://github.com/PaulMaly/perlite#widget-state)
         - [Reactivity system]()
     - [Widget template](https://github.com/PaulMaly/perlite#widget-template)
+        - [Rendering]()
         - [Template syntax]()
         - [Using expressions]()
         - [Text bindings]()
@@ -34,17 +35,30 @@ Perlite is a **simple** and **declarative** way to create rich client-side widge
             - [Conditions]()
             - [Looping]()
     - [Widget API](https://github.com/PaulMaly/perlite#widget-api)
-        - [$widget.target]()
-        - [$widget.state]()
-        - [$widget.model]()
-        - [$widget.effect(callback)]()
-        - [$widget.on(type, listener [, options])]()
-        - [$widget.render()]()
-        - [$widget.destroy()]()
-        - [$widget.ctx(callback)]()
+        - [$widget.target: HTMLElement | Node;]()
+        - [$widget.state: Proxy;]()
+        - [$widget.model: object;]()
+        - [$widget.effect(callback: () => void): () => void;]()
+        - [$widget.on(type: string, listener: (e: Event) => void, options?: object): () => void;]()
+        - [$widget.render(): void;]()
+        - [$widget.destroy(): void;]()
+        - [$widget.ctx(callback: (...ctx: any[]) => any): any;]()
     - [Widget container API](https://github.com/PaulMaly/perlite#widget-container-api)
+        - [$$widgets[index: number]: Widget;]()
+        - [$$widgets.target: NodeList | Node[];]()
+        - [$$widgets.state(callback: (state: Proxy) => void): void;]()
+        - [$$widgets.effect(callback: (state: Proxy) => () => void): (() => void)[];]()
+        - [$$widgets.on(type: string, listener: (event: CustomEvent) => void, options?: object): (() => void)[];]()
+        - [$$widgets.render(): void;]()
+        - [$$widgets.destroy(): void;]()
+        - [$$widgets.ctx(callback: (...ctx: any[]) => any): any;]()
+        - [$$widgets.forEach(callback: (widget: Widget, index?: number, widgets?: Widget[]) => void): any;]()
 - [Advanced usage](https://github.com/PaulMaly/perlite#-advanced-usage)
     - [Directives](https://github.com/PaulMaly/perlite#directives)
+        - [Lit-html directives]()
+        - [Lists & keys]()
+        - [Event listener modifiers]()
+        - [Refs & decorators]()
     - [Custom directive](https://github.com/PaulMaly/perlite#custom-directives)
     - [Widget context](https://github.com/PaulMaly/perlite#widget-context)
     - [Widget nesting](https://github.com/PaulMaly/perlite#widget-nesting)
@@ -252,6 +266,8 @@ WIP
 
 WIP
 
+#### Rendering
+
 #### Template syntax
 
 #### Using expressions
@@ -274,31 +290,43 @@ WIP
 
 WIP
 
-#### $widget.target
+#### $widget.target: HTMLElement | Node;
 
-#### $widget.state
+#### $widget.state: Proxy;
 
-#### $widget.model
+#### $widget.model: object;
 
-#### $widget.effect(callback)
+#### $widget.effect(callback: () => void): () => void;
 
-+ `callback`: function
+#### $widget.on(type: string, listener: (e: Event) => void, options?: object): () => void;
 
-#### $widget.on(type, listener [, options])
+#### $widget.render(): void;
 
-+ `type`: string
-+ `listener`: function
-+ `options`: object
+#### $widget.destroy(): void;
 
-#### $widget.render()
-
-#### $widget.destroy()
-
-#### $widget.ctx(callback)
-
-+ `callback`: function
+#### $widget.ctx(callback: (...ctx: any[]) => any): any;
 
 ### Widget container API
+
+WIP
+
+#### $$widgets[index: number]: Widget;
+
+#### $$widgets.target: NodeList | Node[];
+
+#### $$widgets.state(callback: (state: Proxy) => void): void;
+
+#### $$widgets.effect(callback: (state: Proxy) => () => void): (() => void)[];
+
+#### $$widgets.on(type: string, listener: (event: CustomEvent) => void, options?: object): (() => void)[];
+
+#### $$widgets.render(): void;
+
+#### $$widgets.destroy(): void;
+
+#### $$widgets.ctx(callback: (...ctx: any[]) => any): any;
+
+#### $$widgets.forEach(callback: (widget: Widget, index?: number, widgets?: Widget[]) => void): void;
 
 ## 🛠 Advanced usage
 
@@ -327,6 +355,16 @@ WIP
 ### Transitions
 
 ### Utilities
+
+#### tick(fn?: () => any): Promise<any>;
+
+#### memo(fn: (...args: any[]) => any, invalidate?: (...args: any[]) => any): (...args: any[]) => any;
+
+#### attrToVal(str: string): any;
+
+#### camelCase(str: string): string;
+
+#### dashCase(str: string): string;
 
 ## ⌨️ Typescript support
 
