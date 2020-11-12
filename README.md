@@ -16,6 +16,7 @@ Perlite is a **simple** and **declarative** way to create rich client-side widge
 - [Installation](https://github.com/PaulMaly/perlite#-installation)
     - [NPM](https://github.com/PaulMaly/perlite#npm)
     - [CDN](https://github.com/PaulMaly/perlite#cdn)
+    - [Distribution](https://github.com/PaulMaly/perlite#distribution)
 - [Basic usage](https://github.com/PaulMaly/perlite#-basic-usage)
     - [Widget declaration](https://github.com/PaulMaly/perlite#widget-declaration)
     - [Widget creation](https://github.com/PaulMaly/perlite#widget-creation)
@@ -36,23 +37,23 @@ Perlite is a **simple** and **declarative** way to create rich client-side widge
             - [Looping]()
     - [Widget API](https://github.com/PaulMaly/perlite#widget-api)
         - [$widget.target: HTMLElement | Node;]()
-        - [$widget.state: Proxy;]()
+        - [$widget.state: ProxyConstructor;]()
         - [$widget.model: object;]()
-        - [$widget.effect(callback: () => void): () => void;]()
-        - [$widget.on(type: string, listener: (e: Event) => void, options?: object): () => void;]()
+        - [$widget.effect(fn: () => void, opts?: object): () => void;]()
+        - [$widget.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): () => void;]()
         - [$widget.render(): void;]()
         - [$widget.destroy(): void;]()
-        - [$widget.ctx(callback: (...ctx: any[]) => any): any;]()
+        - [$widget.ctx(fn: (...ctx: any[]) => any): any;]()
     - [Widget container API](https://github.com/PaulMaly/perlite#widget-container-api)
         - [$$widgets[index: number]: Widget;]()
         - [$$widgets.target: NodeList | Node[];]()
-        - [$$widgets.state(callback: (state: Proxy) => void): void;]()
-        - [$$widgets.effect(callback: (state: Proxy) => () => void): (() => void)[];]()
-        - [$$widgets.on(type: string, listener: (event: CustomEvent) => void, options?: object): (() => void)[];]()
+        - [$$widgets.state(fn: (state: ProxyConstructor) => void): void;]()
+        - [$$widgets.effect(fn: (state: ProxyConstructor) => () => void, opts?: object): (() => void)[];]()
+        - [$$widgets.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): (() => void)[];]()
         - [$$widgets.render(): void;]()
         - [$$widgets.destroy(): void;]()
-        - [$$widgets.ctx(callback: (...ctx: any[]) => any): any;]()
-        - [$$widgets.forEach(callback: (widget: Widget, index?: number, widgets?: Widget[]) => void): any;]()
+        - [$$widgets.ctx(fn: (...ctx: any[]) => any): any;]()
+        - [$$widgets.forEach(fn: (widget: Widget, index?: number, widgets?: Widget[]) => void): any;]()
 - [Advanced usage](https://github.com/PaulMaly/perlite#-advanced-usage)
     - [Directives](https://github.com/PaulMaly/perlite#directives)
         - [Lit-html directives]()
@@ -115,6 +116,17 @@ const { html } = window.perlite;
 ```
 
 CDNs: [UNPKG](https://unpkg.com/perlite/) | [jsDelivr](https://cdn.jsdelivr.net/npm/perlite/).
+
+### Distribution
+
++ `dist/index.js` - UMD output
++ `dist/index.mjs` - ESM output
++ `dist/index.min.js` - UMD output (minified)
++ `dist/index.min.mjs` - ESM output (minified)
++ `dist/perlite.js` - IIFE bundle
++ `dist/perlite.mjs` - ESM bundle
++ `dist/perlite.min.js` - IIFE bundle (minified)
++ `dist/perlite.min.mjs` - ESM bundle (minified)
 
 ## 🔨 Basic usage
 
@@ -292,19 +304,19 @@ WIP
 
 #### $widget.target: HTMLElement | Node;
 
-#### $widget.state: Proxy;
+#### $widget.state: ProxyConstructor;
 
 #### $widget.model: object;
 
-#### $widget.effect(callback: () => void): () => void;
+#### $widget.effect(fn: () => void, opts?: object): () => void;
 
-#### $widget.on(type: string, listener: (e: Event) => void, options?: object): () => void;
+#### $widget.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): () => void;
 
 #### $widget.render(): void;
 
 #### $widget.destroy(): void;
 
-#### $widget.ctx(callback: (...ctx: any[]) => any): any;
+#### $widget.ctx(fn: (...ctx: any[]) => any): any;
 
 ### Widget container API
 
@@ -314,19 +326,19 @@ WIP
 
 #### $$widgets.target: NodeList | Node[];
 
-#### $$widgets.state(callback: (state: Proxy) => void): void;
+#### $$widgets.state(fn: (state: ProxyConstructor) => void): void;
 
-#### $$widgets.effect(callback: (state: Proxy) => () => void): (() => void)[];
+#### $$widgets.effect(fn: (state: ProxyConstructor) => () => void, opts?: object): (() => void)[];
 
-#### $$widgets.on(type: string, listener: (event: CustomEvent) => void, options?: object): (() => void)[];
+#### $$widgets.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): (() => void)[];
 
 #### $$widgets.render(): void;
 
 #### $$widgets.destroy(): void;
 
-#### $$widgets.ctx(callback: (...ctx: any[]) => any): any;
+#### $$widgets.ctx(fn: (...ctx: any[]) => any): any;
 
-#### $$widgets.forEach(callback: (widget: Widget, index?: number, widgets?: Widget[]) => void): void;
+#### $$widgets.forEach(fn: (widget: Widget, index?: number, widgets?: Widget[]) => void): void;
 
 ## 🛠 Advanced usage
 

@@ -29,16 +29,16 @@ export const $ = (
         if (key in model) model[key] = attrToVal(value);
     });
 
-    const state: Type.ReactiveState = observe(model, {
+    const state: ProxyConstructor = observe(model, {
         batch: true,
         deep: true,
         bind: true,
         ...options
     });
 
-    const emit = (name, detail, { bubbles = false, cancelable = true } = {}) => {
+    const emit = (type: string, detail: object, { bubbles = false, cancelable = true } = {}) => {
         target.dispatchEvent(
-            new CustomEvent(name, { detail, bubbles, cancelable })
+            new CustomEvent(type, { detail, bubbles, cancelable })
         );
     };
 
@@ -57,10 +57,10 @@ export const $ = (
     });
 
     const events = new Set();
-    const on = (...args: [string, () => any]) => {
-        target.addEventListener(...args);
+    const on = (type: string, fn: (e: CustomEvent) => void, opts?: object | boolean) => {
+        target.addEventListener(type, fn, opts);
         const off = () => {
-            target.removeEventListener(...args);
+            target.removeEventListener(type, fn, opts);
             return events.delete(off);
         };
         events.add(off);
@@ -68,8 +68,8 @@ export const $ = (
     };
 
     const effects = new Set();
-    const effect = (...args: any[]) => {
-        const handle = computed(...args);
+    const effect = (fn: () => void, opts?: object) => {
+        const handle = computed(fn, opts);
         const cancel = () => {
             dispose(handle);
             return effects.delete(cancel);
@@ -148,7 +148,7 @@ export const $$ = ({ target, ...config }: Type.Configs, ...context): Type.Widget
         on: (...args): [] => widgets.map((widget: Type.Widget) => widget.on(...args)),
         destroy: (): void => widgets.forEach((widget: Type.Widget) => widget.destroy()),
         render: (): void => widgets.forEach((widget: Type.Widget) => widget.render()),
-        state: (fn: (state: Type.ReactiveState) => void): void => {
+        state: (fn: (state: ProxyConstructor) => void): void => {
             widgets.forEach((widget: Type.Widget) => fn(widget.state))
         },
         ctx: (fn: (...ctx: any[]) => any) => fn(...context),

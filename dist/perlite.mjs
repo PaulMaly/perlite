@@ -2967,8 +2967,8 @@ const $ = (_a, ...context) => {
             model[key] = attrToVal(value);
     });
     const state = observe$1(model, Object.assign({ batch: true, deep: true, bind: true }, options));
-    const emit = (name, detail, { bubbles = false, cancelable = true } = {}) => {
-        target.dispatchEvent(new CustomEvent(name, { detail, bubbles, cancelable }));
+    const emit = (type, detail, { bubbles = false, cancelable = true } = {}) => {
+        target.dispatchEvent(new CustomEvent(type, { detail, bubbles, cancelable }));
     };
     let mounted = false;
     const rerender = () => {
@@ -2985,18 +2985,18 @@ const $ = (_a, ...context) => {
         return Promise.resolve().then(() => computeAsync(rerender));
     });
     const events = new Set();
-    const on = (...args) => {
-        target.addEventListener(...args);
+    const on = (type, fn, opts) => {
+        target.addEventListener(type, fn, opts);
         const off = () => {
-            target.removeEventListener(...args);
+            target.removeEventListener(type, fn, opts);
             return events.delete(off);
         };
         events.add(off);
         return off;
     };
     const effects = new Set();
-    const effect = (...args) => {
-        const handle = computed$1(...args);
+    const effect = (fn, opts) => {
+        const handle = computed$1(fn, opts);
         const cancel = () => {
             dispose$1(handle);
             return effects.delete(cancel);
