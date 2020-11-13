@@ -30,5 +30,5 @@ export declare type Widgets = {
     ctx: (fn: (...ctx: any[]) => any) => any;
     destroy: () => void;
     render: () => void;
-    forEach: (fn: (widget: Widget, index?: number, widgets?: Widget[]) => void) => void;
+    forEach: (fn: (widget: Widget, index: number, widgets: Widget[]) => void) => void;
 };

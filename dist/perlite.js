@@ -3280,6 +3280,7 @@ var perlite = (function (exports) {
         const renderer = computed$1(({ computeAsync }) => {
             if (mounted && !document.contains(target))
                 return destroy();
+            emit('state', model);
             return Promise.resolve().then(() => computeAsync(rerender));
         });
         const events = new Set();

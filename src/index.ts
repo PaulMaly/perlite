@@ -53,6 +53,7 @@ export const $ = (
     };
     const renderer = computed(({ computeAsync }) => {
         if (mounted && !document.contains(target)) return destroy();
+        emit('state', model);
         return Promise.resolve().then(() => computeAsync(rerender));
     });
 

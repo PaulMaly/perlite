@@ -25,7 +25,6 @@ Perlite is a **simple** and **declarative** way to create rich client-side widge
     - [Widget state](https://github.com/PaulMaly/perlite#widget-state)
         - [Reactivity system]()
     - [Widget template](https://github.com/PaulMaly/perlite#widget-template)
-        - [Rendering]()
         - [Template syntax]()
         - [Using expressions]()
         - [Text bindings]()
@@ -34,7 +33,9 @@ Perlite is a **simple** and **declarative** way to create rich client-side widge
         - [Template fragments]()
         - [Control flow]()
             - [Conditions]()
-            - [Looping]()
+            - [Looping]()        
+        - [Rendering]()
+    - [Widget lifecycle events](https://github.com/PaulMaly/perlite#widget-lifecycle-events)
     - [Widget API](https://github.com/PaulMaly/perlite#widget-api)
         - [$widget.target: HTMLElement | Node;]()
         - [$widget.state: ProxyConstructor;]()
@@ -53,7 +54,7 @@ Perlite is a **simple** and **declarative** way to create rich client-side widge
         - [$$widgets.render(): void;]()
         - [$$widgets.destroy(): void;]()
         - [$$widgets.ctx(fn: (...ctx: any[]) => any): any;]()
-        - [$$widgets.forEach(fn: (widget: Widget, index?: number, widgets?: Widget[]) => void): any;]()
+        - [$$widgets.forEach(fn: (widget: Widget, index: number, widgets: Widget[]) => void): any;]()
 - [Advanced usage](https://github.com/PaulMaly/perlite#-advanced-usage)
     - [Directives](https://github.com/PaulMaly/perlite#directives)
         - [Lit-html directives]()
@@ -278,45 +279,262 @@ WIP
 
 WIP
 
-#### Rendering
-
 #### Template syntax
-
-#### Using expressions
 
 #### Text bindings
 
+```javascript
+html`
+    <h1>Title: ${title}</h1>
+`;
+```
+
+#### Using expressions
+
+```javascript
+html`
+    <h1>${title}</h1>
+    <h2>${a + b}</h2>
+    <h3>${user.name}</h3>
+    <h4>${description.substring(50)}</h4>
+    <h5>${formatDate(user.birthDay)}</h5>
+`;
+```
+
 #### Attribute bindings
+
+```javascript
+html`
+    <input value=${title}>
+    <div class="default-class ${class}"></div>
+`;
+```
+
+##### Boolean attributes
+
+```javascript
+html`
+    <button ?disabled=${isDisabled}>Click me</button>
+`;
+```
+
+##### Bind to properties
+
+```javascript
+html`
+    <input .value=${title}>
+`;
+```
 
 #### Event listeners
 
+```javascript
+html`
+    <input @input=${handleInput}>
+    <button @click=${e => alert('Clicked!')}>Click me</button>
+`;
+```
+
 #### Template fragments
+
+```javascript
+function render(state, emit) {
+
+    const welcomeMessage = html`<h1>Welcome ${state.user.name}</h1>`;
+
+    return html`
+        ${welcomeMessage}
+        <a href="/logout">Logout</a>
+    `;
+}
+```
+
+```javascript
+function userInfo(user) {
+    return html`
+        <dl>
+            <dt>User name:</dt>
+            <dd>${user.name}</dd>
+            <dt>Email address:</dt>
+            <dd>${user.email}</dd>
+            <dt>Birthday:</dt>
+            <dd>${formatDate(user.birthDay)}</dd>
+        </dl>
+    `;
+}
+
+function render(state, emit) {
+    return html`
+        <h1>${state.title}</h1>
+        ${userInfo(state.user)}
+    `;
+}
+```
 
 #### Control flow
 
 ##### Conditions
 
+in template
+
+```javascript
+html`
+  ${state.user ? html`
+        <h1>Welcome ${state.user.name}</h1>
+        <a href="/logout">Logout</a>
+    ` : html`
+        <a href="/login">Login</a>
+    `
+  }
+`;
+```
+
+or in code
+
+```javascript
+
+function userMessage(user) {
+    if (user) {
+        return html`
+            <h1>Welcome ${user.name}</h1>
+            <a href="/logout">Logout</a>
+        `;
+    } else {
+        return html`
+            <a href="/login">Login</a>
+        `;
+    }
+}
+
+function render(state, emit) {
+    return html`
+        ${userMessage(state.user)}
+    `;
+}
+```
+
 ##### Looping
+
+in template
+
+```javascript
+html`
+  <ul>
+    ${state.items.map((item) => html`
+        <li>${item.title}</li>
+    `)}
+  </ul>
+`;
+```
+
+or in code
+
+```javascript
+function itemsList(items) {
+    return items.map((item) => html`
+        <li>${item.title}</li>
+    `);
+}
+
+function render(state, emit) {
+    return html`
+        <ul>
+            ${itemsList(state.items)}
+        </ul>
+    `;
+}
+```
+
+#### Rendering
+
+### Widget lifecycle events
+
+These events are pre-defined and emitted on `target` node as the other widget custom events. In most cases, you should use the built-in [`on()`]() function, but you also can do-it-yourself and use the regular `target.addEventListener()` function, but don't forget to remove when you don't need it.
+
++ `mount` - fires once when the component has been first time rendered to the DOM;
++ `state` - fires on every state change, before DOM update;
++ `update` - fires on every DOM updated, after `state` event;
++ `destroy` - fires once when the component is removed from the DOM;
+
+Each life-cycle event receives a [`model`]() of the widget in `event.detail`. This state is not reactive and its changes won't trigger widget re-rendering. If you *really* need to start new rendering cycle from a life-cycle event handler (basically, you shouldn't do that), you can use reactive [`state`]() or manual call [`render()`]() function via widget object.
 
 ### Widget API
 
-WIP
-
 #### $widget.target: HTMLElement | Node;
+
+Just a reference to target node of a widget.
 
 #### $widget.state: ProxyConstructor;
 
+Reactive state of a widget based on initial state object (called model). Changing this state will perform a re-render and DOM updates.
+
+```javascript
+$widget.state.foo = 1; // widget scheduled for update
+$widget.state.bar = true;
+$widget.state.baz = 'horse'; // updates will be bunched
+```
+
 #### $widget.model: object;
+
+It's just a reference to plain state object, which is a model for reactive state (proxy target). You can changing this model, but because it's not reactive, re-rendering won't be performed. To apply these changes to the DOM you can use [`render()`]() function.
 
 #### $widget.effect(fn: () => void, opts?: object): () => void;
 
+The effect is a function which executed each time its dependencies changed. Dependencies are tracked automatically and don't need to be explicitly specified.
+
+```javascript
+const cancal = $widget.effect(() => {
+    console.log('Foo is changed:', $widget.state.foo);
+});
+...
+// somewhere latter
+cancel();
+```
+
+`effect()` function is just a wrapper ontop of [hyperactiv's `computed()`](https://github.com/elbywan/hyperactiv#2-define-computed-functions) with automatic dispose on widget destroy. So, you can use all things described in [hyperactiv docs](https://github.com/elbywan/hyperactiv). This function return `cancel()` function, so you can dispose of an effect when you actually don't need it:
+
 #### $widget.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): () => void;
+
+This function lets you add an event listener to the widget to catch custom events dispatched by `emit()` function and automatically removes the handler on widget destroy. Also, you can remove the handler manually using `off()` function:
+
+```javascript
+const off = $widget.on('my-custom-event', (event) => {
+    console.log('Event payload', event.detail);
+});
+...
+// somewhere latter
+off();
+```
 
 #### $widget.render(): void;
 
+Call this function to manually re-render a widget. Usually, it's not necessary, because you need just use a state-based approach and change the reactive state to automatically perform a re-render. But sometimes you may want to force the DOM update. This function is idempotent and safe to re-call. If actual state wasn't changed, no changes in DOM will performed. 
+
 #### $widget.destroy(): void;
 
+Completelly destroy a widget, removes all event listeners and effects, and clean up the markup. It also fires a [`destroy`](https://github.com/PaulMaly/perlite#widget-lifecycle-events) life-cycle event.
+
+Calling this function is the most proper way to destroy the widget, but if, for some reason, the `target` node will be removed from the DOM by external code, it will be tracked on the next render cycle, and destroy operations will be performed as appropriate.
+
 #### $widget.ctx(fn: (...ctx: any[]) => any): any;
+
+This function receives callback function to get context values passed to the widget during creation.
+
+```javascript
+$widget.ctx((foo, bar, baz) => {
+    console.log('widget context values', foo, bar, baz);
+});
+```
+
+`ctx()` function is fully synchronous and just return the result of callback. So you can return nececeries values directly and chain it with the other methods.
+
+```javascript
+const bar = $widget.ctx((foo, bar, baz) => bar);
+
+$widget.ctx((...ctx) => ctx).forEach((val) => ...);
+```
+
+More details about [context](https://github.com/PaulMaly/perlite#widget-context).
 
 ### Widget container API
 
@@ -338,7 +556,7 @@ WIP
 
 #### $$widgets.ctx(fn: (...ctx: any[]) => any): any;
 
-#### $$widgets.forEach(fn: (widget: Widget, index?: number, widgets?: Widget[]) => void): void;
+#### $$widgets.forEach(fn: (widget: Widget, index: number, widgets: Widget[]) => void): void;
 
 ## 🛠 Advanced usage
 
