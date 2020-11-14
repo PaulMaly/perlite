@@ -19,7 +19,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run prepublishOnly"
+      "pre-commit": "npm run prepublishOnly && git add ."
     }
   },
   "browserslist": [
