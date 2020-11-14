@@ -73,11 +73,11 @@
 
 ## 📋 Description & Features
 
-Unlike the other frontend frameworks, eg. *React*, *Vue*, or *Svelte*, which are mostly created for building SPA/RIA applications, *Perlite*'s main goal is to make the life of developers of classical server-side applications a little bit easier and the modern front-end development techniques more accessible. Without extra knowledge of building tools and other dark sides of the frontend ecosystem. 
+Unlike the other frontend frameworks, eg. *React*, *Vue*, *Angular* or *Svelte*, which are mostly created for building SPA/RIA applications, **Perlite**'s main goal is to make the life of developers of classical server-side applications a little bit easier and the modern front-end development techniques more accessible. Without extra knowledge of building tools and other dark sides of the frontend ecosystem . 👾
 
-*Perlite* gives you a combination of the best ideas from the most popular SPA frameworks, like **UI is a function of a state** (React), **reactive state-driven** development (Vue), and **lack of Virtual DOM** (Svelte).
+**Perlite** gives you a combination of the best ideas from the most popular SPA frameworks, like **UI is a function of a state** (React), **reactive state driven development** (Vue), **observables** (Angular) and **lack of Virtual DOM** (Svelte).
 
-*Perlite* focuses on building **standalone** UI widgets smashed across different parts of the server-generated page and provides handy tools to manage these widgets and interact between them.
+**Perlite** focuses on building **standalone** UI widgets placed across different parts of the server-generated page and provides handy tools to manage these widgets and interact between them.
 
 ## 📦 Installation
 
@@ -242,7 +242,6 @@ Please, use `$$` (double `$`) prefix to visually distinguish widget containers f
 Widgets and widget containers have mostly the same APIs, but having specifics at some points. For example, these functions will work the same for the end-user:
 
 ```javascript
-
 $widget.on('eventName', () => { ... }); // add event listener for the widget
 $$widgets.on('eventName', () => { ... }); // add event listener for every widget in container
 
@@ -585,7 +584,57 @@ WIP
 
 ### Widget nesting
 
-### Global state
+### Global state (store)
+
+```javascript
+import { observe } from 'perlite';
+
+export const store$ = observe({
+    products: [],
+    config: {},
+    user: {},
+});
+```
+
+As it's often in *Angular*, use observables named with a trailing “$” sign to distinguish it from the other objects.
+
+```javascript
+import { computed, dispose } from 'perlite';
+import { store$ } from './store.js';
+
+const userSubscription = computed(() => {
+    console.log('User data has changed', store$.user);
+});
+...
+dispose(userSubscription);
+```
+
+To subscribe to store changes use `computed` function to perform any side-effect you need. Don't forget to dispose a subscription when you don't need it anymore.
+
+Read more about these things in [hyperactiv docs](https://github.com/elbywan/hyperactiv#usage).
+
+You able to use stores inside of widget just imported them:
+
+```javascript
+import store$ from './store.js'
+...
+function userInfo(user) { ... }
+...
+function render(state, emit) {
+    return html`
+        <h1>${state.title}</h1>
+        ${userInfo(store$.user)}
+    `;
+}
+```
+
+But to re-render the widget when observable store has changed, you should manually subscribe and call `render()` function somewhere outside of widget declaration:
+
+```javascript
+computed(() => store$ && $widget.render());
+...
+store$.user = user; // will re-render the widget now
+```
 
 ### Styling
 
