@@ -16,7 +16,7 @@ export const memo = (fn: (...args: any[]) => any, invalidate?: (...args: any[]) 
             }
         }
 
-        if (key !== undefined) {
+        if (key === undefined) {
             key = JSON.stringify(args);
         }
 

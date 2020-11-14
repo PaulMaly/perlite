@@ -5,14 +5,13 @@
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/perlite?style=flat-square)](https://bundlephobia.com/result?p=perlite)
 ![GitHub](https://img.shields.io/github/license/PaulMaly/perlite?style=flat-square)
 
-> *hy*__per__*activ* 🌋 + __lit__*-html* ☄️ + __e__*xtensions* 🌊 = __perlite__ 💎.
+> hy**per**activ 🌋 + **lit**-html* ☄️ + **e**xtensions* 🌊 = **perlite** 💎.
 
-Perlite is a **simple** and **declarative** way to create rich client-side widgets designed with server-side apps in mind. Completely based on native/vanilla Javascript standards and doesn't require additional build steps or compilation.
+*Perlite* is a **simple** and **declarative** way to create rich client-side widgets designed with server-side apps in mind. Completely based on native/vanilla Javascript standards and doesn't require additional build steps or compilation.
 
 ## 🚩 Table of contents
 
-- [Features](https://github.com/PaulMaly/perlite#-features).
-- [Installation](https://github.com/PaulMaly/perlite#-installation)
+- [Description & Features](https://github.com/PaulMaly/perlite#-features).
 - [Installation](https://github.com/PaulMaly/perlite#-installation)
     - [NPM](https://github.com/PaulMaly/perlite#npm)
     - [CDN](https://github.com/PaulMaly/perlite#cdn)
@@ -72,7 +71,13 @@ Perlite is a **simple** and **declarative** way to create rich client-side widge
 - [Browsers support](https://github.com/PaulMaly/perlite#-browsers-support)
 - [License](https://github.com/PaulMaly/perlite#-license)
 
-## 📋 Features
+## 📋 Description & Features
+
+Unlike the other frontend frameworks, eg. *React*, *Vue*, or *Svelte*, which are mostly created for building SPA/RIA applications, *Perlite*'s main goal is to make the life of developers of classical server-side applications a little bit easier and the modern front-end development techniques more accessible. Without extra knowledge of building tools and other dark sides of the frontend ecosystem. 
+
+*Perlite* gives you a combination of the best ideas from the most popular SPA frameworks, like **UI is a function of a state** (React), **reactive state-driven** development (Vue), and **lack of Virtual DOM** (Svelte).
+
+*Perlite* focuses on building **standalone** UI widgets smashed across different parts of the server-generated page and provides handy tools to manage these widgets and interact between them.
 
 ## 📦 Installation
 
@@ -447,6 +452,8 @@ function render(state, emit) {
 
 #### Rendering
 
+WIP
+
 ### Widget lifecycle events
 
 These events are pre-defined and emitted on `target` node as the other widget custom events. In most cases, you should use the built-in [`on()`]() function, but you also can do-it-yourself and use the regular `target.addEventListener()` function, but don't forget to remove when you don't need it.
@@ -514,7 +521,7 @@ Call this function to manually re-render a widget. Usually, it's not necessary, 
 
 Completelly destroy a widget, removes all event listeners and effects, and clean up the markup. It also fires a [`destroy`](https://github.com/PaulMaly/perlite#widget-lifecycle-events) life-cycle event.
 
-Calling this function is the most proper way to destroy the widget, but if, for some reason, the `target` node will be removed from the DOM by external code, it will be tracked on the next render cycle, and destroy operations will be performed as appropriate.
+Calling this function is the most proper way to destroy the widget, but if, for some reason, the `target` node will be removed from the DOM by external code, it will be tracked on the next render cycle, and destroy operations will be performed automatically.
 
 #### $widget.ctx(fn: (...ctx: any[]) => any): any;
 

@@ -9,13 +9,18 @@
     "./dist/index.mjs": "./dist/perlite.mjs"
   },
   "scripts": {
-    "build": "npm run clean && npm run lint && rollup --config && npm run size",
+    "build": "npm run lint && npm run clean && rollup --config",
     "lint": "tslint -c tslint.json \"src/**/*.ts\"",
     "lint:fix": "tslint --fix -c tslint.json \"src/**/*.ts\"",
     "clean": "rm -rf ./dist",
     "size": "size-limit",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublishOnly": "npm run lint & npm run build"
+    "prepublishOnly": "npm run build && npm run size"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prepublishOnly"
+    }
   },
   "browserslist": [
     "extends browserslist-config-google"
@@ -84,6 +89,7 @@
     "@types/jest": "^26.0.15",
     "browserslist-config-google": "^2.0.0",
     "core-js": "^3.7.0",
+    "husky": "^4.3.0",
     "jest": "^26.6.0",
     "rollup": "^2.32.1",
     "rollup-plugin-minify-html-literals": "^1.2.5",
