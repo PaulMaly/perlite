@@ -1562,11 +1562,12 @@ function attrToVal(str) {
     }
     return str;
 }
-function camelCase(str) {
-    return str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+function camelCase(str, pascal = false) {
+    const camel = str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+    return pascal ? camel.replace(/^\w/, s => s.toUpperCase()) : camel;
 }
-function dashCase(str) {
-    return str.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
+function kebabCase(str) {
+    return str.replace(/[A-Z]/g, '-$&').toLowerCase();
 }
 
 /**
@@ -3024,7 +3025,7 @@ const $ = (_a, ...context) => {
     observer.observe(target, {
         attributeFilter: Object.entries(model).reduce((attrs, [key, val]) => {
             if (typeof val !== 'function') {
-                attrs.push(`data-${dashCase(key)}`);
+                attrs.push(`data-${kebabCase(key)}`);
             }
             return attrs;
         }, []),
@@ -3068,4 +3069,4 @@ const $$ = (_a, ...context) => {
         }, ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
 };
 
-export { $, $$, AttributeCommitter, AttributePart, BooleanAttributePart, DefaultTemplateProcessor, EventPart, NodePart, PropertyCommitter, PropertyPart, SVGTemplateResult, Template, TemplateInstance, TemplateResult, asyncAppend, asyncReplace, attrToVal, bind, cache, call, camelCase, capture, classMap, computed$1 as computed, createMarker, dashCase, decorator, defaultTemplateProcessor, directive, dispose$1 as dispose, each, guard, html, ifDefined, isDirective, isIterable, isPrimitive, isTemplatePartActive, live, memo, noChange, noop, nothing, observe$1 as observe, once, parts, passive, prevent, ref, removeNodes, render, reparentNodes, repeat, self, stop, styleMap, svg, templateCaches, templateContent, templateFactory, tick, unsafeHTML, unsafeSVG, until };
+export { $, $$, AttributeCommitter, AttributePart, BooleanAttributePart, DefaultTemplateProcessor, EventPart, NodePart, PropertyCommitter, PropertyPart, SVGTemplateResult, Template, TemplateInstance, TemplateResult, asyncAppend, asyncReplace, attrToVal, bind, cache, call, camelCase, capture, classMap, computed$1 as computed, createMarker, decorator, defaultTemplateProcessor, directive, dispose$1 as dispose, each, guard, html, ifDefined, isDirective, isIterable, isPrimitive, isTemplatePartActive, kebabCase, live, memo, noChange, noop, nothing, observe$1 as observe, once, parts, passive, prevent, ref, removeNodes, render, reparentNodes, repeat, self, stop, styleMap, svg, templateCaches, templateContent, templateFactory, tick, unsafeHTML, unsafeSVG, until };

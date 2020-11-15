@@ -1,6 +1,6 @@
 export const noop = () => { };
 
-export const tick = (fn: (() => any) = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
+export const tick = (fn: (() => any) = noop): Promise<undefined> => new Promise((resolve) => setTimeout(resolve)).then(fn);
 
 export const memo = (fn: (...args: any[]) => any, invalidate?: (...args: any[]) => any) => {
     const cache = new Map();
@@ -46,10 +46,11 @@ export function attrToVal(str: string): any {
     return str;
 }
 
-export function camelCase(str: string): string {
-    return str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+export function camelCase(str: string, pascal: boolean = false): string {
+    const camel = str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+    return pascal ? camel.replace(/^\w/, s => s.toUpperCase()) : camel;
 }
 
-export function dashCase(str: string): string {
-    return str.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase())
+export function kebabCase(str: string): string {
+    return str.replace(/[A-Z]/g, '-$&').toLowerCase();
 }

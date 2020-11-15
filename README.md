@@ -5,9 +5,9 @@
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/perlite?style=flat-square)](https://bundlephobia.com/result?p=perlite)
 ![GitHub](https://img.shields.io/github/license/PaulMaly/perlite?style=flat-square)
 
-> hy**per**activ 🌋 + **lit**-html* ☄️ + **e**xtensions* 🌊 = **perlite** 💎.
+> hy**per**activ 🌋 + **lit**-html ☄️ + **e**xtensions 🌊 = **perlite** 💎.
 
-*Perlite* is a **simple** and **declarative** way to create rich client-side widgets designed with server-side apps in mind. Completely based on native/vanilla Javascript standards and doesn't require additional build steps or compilation.
+**Perlite** is a **simple** and **declarative** way to create rich client-side widgets designed with server-side apps in mind. Completely based on native/vanilla Javascript standards and doesn't require additional build steps or compilation.
 
 ## 🚩 Table of contents
 
@@ -63,7 +63,7 @@
     - [Custom directive](https://github.com/PaulMaly/perlite#custom-directives)
     - [Widget context](https://github.com/PaulMaly/perlite#widget-context)
     - [Widget nesting](https://github.com/PaulMaly/perlite#widget-nesting)
-    - [Global state](https://github.com/PaulMaly/perlite#global-state)
+    - [Shared state](https://github.com/PaulMaly/perlite#shared-state)
     - [Styling](https://github.com/PaulMaly/perlite#styling)
     - [Transitions](https://github.com/PaulMaly/perlite#transitions)
     - [Utilities](https://github.com/PaulMaly/perlite#utilities)
@@ -176,7 +176,7 @@ export const $helloWorld = $({
 });
 ```
 
-The constructor function will return an object which allows you to manage a widget. To distinguish widgets from regular JS objects, it's recommended to follow the naming convention by prefixing widget names with the `$`. 
+The constructor function will return an object which allows you to manage a widget. To distinguish widgets from regular JS objects, it's recommended to follow the naming convention by prefixing widget names with the “$” sign. 
 
 Actually, a widget object is just a namespace without any overall context. So, you can use ES6 [Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) and use things separately:
 
@@ -237,7 +237,7 @@ export const $$helloWorlds = $$({
 });
 ```
 
-Please, use `$$` (double `$`) prefix to visually distinguish widget containers from single widgets and regular JS objects.
+Please, use `$$` (double “$” sign) prefix to visually distinguish widget containers from single widgets and regular JS objects.
 
 Widgets and widget containers have mostly the same APIs, but having specifics at some points. For example, these functions will work the same for the end-user:
 
@@ -279,11 +279,15 @@ WIP
 
 #### Reactivity system
 
+WIP
+
 ### Widget template
 
 WIP
 
 #### Template syntax
+
+WIP
 
 #### Text bindings
 
@@ -309,7 +313,7 @@ html`
 
 ```javascript
 html`
-    <input value=${title}>
+    <input value="${title}">
     <div class="default-class ${class}"></div>
 `;
 ```
@@ -383,10 +387,12 @@ in template
 
 ```javascript
 html`
-  ${state.user ? html`
+  ${state.user ? 
+    html`
         <h1>Welcome ${state.user.name}</h1>
         <a href="/logout">Logout</a>
-    ` : html`
+    ` : 
+    html`
         <a href="/login">Login</a>
     `
   }
@@ -396,7 +402,6 @@ html`
 or in code
 
 ```javascript
-
 function userMessage(user) {
     if (user) {
         return html`
@@ -489,7 +494,7 @@ It's just a reference to plain state object, which is a model for reactive state
 The effect is a function which executed each time its dependencies changed. Dependencies are tracked automatically and don't need to be explicitly specified.
 
 ```javascript
-const cancal = $widget.effect(() => {
+const cancel = $widget.effect(() => {
     console.log('Foo is changed:', $widget.state.foo);
 });
 ...
@@ -497,7 +502,7 @@ const cancal = $widget.effect(() => {
 cancel();
 ```
 
-`effect()` function is just a wrapper ontop of [hyperactiv's `computed()`](https://github.com/elbywan/hyperactiv#2-define-computed-functions) with automatic dispose on widget destroy. So, you can use all things described in [hyperactiv docs](https://github.com/elbywan/hyperactiv). This function return `cancel()` function, so you can dispose of an effect when you actually don't need it:
+`effect()` function is just a wrapper ontop of [hyperactiv's `computed()`](https://github.com/elbywan/hyperactiv#2-define-computed-functions) with automatic dispose on widget destroy. So, you can use all things described in [hyperactiv guide](https://github.com/elbywan/hyperactiv). This function return `cancel()` function, so you can dispose of an effect when you actually don't need it.
 
 #### $widget.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): () => void;
 
@@ -532,7 +537,7 @@ $widget.ctx((foo, bar, baz) => {
 });
 ```
 
-`ctx()` function is fully synchronous and just return the result of callback. So you can return nececeries values directly and chain it with the other methods.
+This function is fully synchronous and just returns the result of the callback. So you can return values you need directly or chain it with the other methods.
 
 ```javascript
 const bar = $widget.ctx((foo, bar, baz) => bar);
@@ -566,25 +571,181 @@ WIP
 
 ## 🛠 Advanced usage
 
-WIP
-
 ### Directives
+
+WIP
 
 #### Lit-html directives
 
+WIP
+
 #### Lists & keys
+
+WIP
 
 #### Event listener modifiers
 
+```javascript
+import { 
+    capture,
+    passive,  
+    once,
+    self,
+    stop, // stopPropagation()
+    prevent, // preventDefault()
+} from 'perlite';
+...
+html`
+    <form @submit=${prevent(e => { ... })}>
+        ...
+        <button @click=${once(self(e => { ... }))}>
+            Submit
+        </button>
+    </form>
+`;
+```
+
 #### Refs & decorators
+
+```javascript
+import { ref } from 'perlite';
+...
+html`<div @=${ref(el => state.el = el)}></div>`;
+```
+
+```javascript
+import { decorator } from 'perlite';
+...
+function myDecorator(node, foo, bar, baz) {
+    // do something
+    return {
+        update(foo, bar, baz) { ... },
+        destroy() { ... }
+    };
+}
+...
+html`<div @=${decorator(myDecorator, foo, bar, baz)}></div>`;
+```
 
 ### Custom directive
 
+Directives are fully provided by *lit-html* without any specifics or limitations. So, you can use [Creating directives](https://lit-html.polymer-project.org/guide/creating-directives) section in *lit-html* guide to learn more about custom directive creation.
+
 ### Widget context
+
+The main thing you should know, context values are static. They are passed through when the widget is created, their count and order can't be changed all the widget life-cycle. Of course, if the context value is a reference to the object/array, its changes could be applied in the next rendering cycle. But these changes never triggering a new render by itself.
+
+```javascript
+const context = { ... };
+
+const $widget = $({
+        target,
+        render,
+        state, 
+    }, 
+    context
+);
+```
+
+```javascript
+const context1 = { ... };
+const context2 = true;
+
+const $widget = $({
+        target,
+        render,
+        state, 
+    }, 
+    context1, 
+    context2,
+    ...
+);
+```
+
+```javascript
+export function state(context1, context2) {
+    // change initial state model depending on context values
+    return {
+        ...
+    };
+}
+
+export function render(state, emit, context1, context2) {
+    const something = Object.entries(context1).reduce(() => { ... });
+
+    return html`
+        <div>Context2: ${context2}</div> 
+    `;
+}
+```
 
 ### Widget nesting
 
-### Global state (store)
+Basically, **Perlite** widgets designed without a focus on their composition. But sometimes you still need to insert one widget into a DOM tree of another widget and communicate with a nested widget on the rendering cycle of its "parent".
+
+To do that, at first, you can create a target element of the nested widget in memory and use the [context](https://github.com/PaulMaly/perlite#widget-context) to pass this widget to render function of the parent.
+
+```javascript
+import * as Nested from './widgets/Nested.js';
+import * as Wrapper from './widgets/Wrapper.js';
+
+const $nested = $({
+        target: document.createElement('div'),
+        ...Nested
+    },
+);
+
+const $wrapper = $({
+        target: document.getElementById('wrapper'),
+        ...Wrapper
+    },
+    $nested
+);
+```
+
+After that, you can just use `target` of the nested widget in template expression and it will be rendered as a fragment of the current widget's DOM tree. Very simple!
+
+```javascript
+export function render(state, emit, $nested) {
+    return html`
+        ${$nested.target}
+
+        <button @click=${e => $nested.state.count += 1}>
+            Increment nested value
+        </button>
+    `;
+}
+```
+
+The number of nested widgets, as well as the way they are passed through the context, is not limited in any way. You can choose the most appropriate way you like.
+
+```javascript
+const $wrapper = $({
+        target: document.getElementById('wrapper'),
+        ...Wrapper
+    }, {
+        $nested1,
+        $nested2
+    }
+);
+```
+
+```javascript
+export function render(state, emit, { $nested1, $nested2 }) {
+    return html`
+        ${$nested1.target}
+        <div>
+            ${$nested2.target}
+        </div>
+    `;
+}
+```
+
+### Shared state
+
+Also known as `store(s)` - a very simple `observables`. Whenever a property of an observed object is changed, every function that depends on this property is called. 
+
+First of all, need to create a new `observable` store:
 
 ```javascript
 import { observe } from 'perlite';
@@ -609,11 +770,11 @@ const userSubscription = computed(() => {
 dispose(userSubscription);
 ```
 
-To subscribe to store changes use `computed` function to perform any side-effect you need. Don't forget to dispose a subscription when you don't need it anymore.
+Use `computed` function to subscribe to the store properties changes and perform any operations or side-effects. Dependencies are automatically tracked so you don't need to explicitly declare anything - just use the properties you need. 
 
-Read more about these things in [hyperactiv docs](https://github.com/elbywan/hyperactiv#usage).
+Don't forget to dispose of a subscription if you no longer need it. Read more about these things in [hyperactiv guide](https://github.com/elbywan/hyperactiv#usage).
 
-You able to use stores inside of widget just imported them:
+You able to use stores inside of widget just by importing them:
 
 ```javascript
 import store$ from './store.js'
@@ -628,29 +789,125 @@ function render(state, emit) {
 }
 ```
 
-But to re-render the widget when observable store has changed, you should manually subscribe and call `render()` function somewhere outside of widget declaration:
+But to re-render the widget when a store has changed, you should manually subscribe and call `render()` function somewhere outside of widget declaration:
 
 ```javascript
 computed(() => store$ && $widget.render());
 ...
-store$.user = user; // will re-render the widget now
+store$.user = user; // now it will re-render the widget 
 ```
 
 ### Styling
 
+WIP
+
 ### Transitions
+
+WIP
 
 ### Utilities
 
-#### tick(fn?: () => any): Promise<any>;
+#### tick(fn?: () => any): Promise<undefined>;
+
+Defer the callback to be executed after the next DOM update cycle. Use it immediately after you’ve changed some data to wait for the DOM update:
+
+```javascript
+import { tick } from 'perlite';
+
+$widget.state.foo += 1;
+
+await tick();
+
+console.log('now DOM updated');
+```
+
+Or if it needed to perform some operation inside of render function/fragments that can trigger a rendering cycle again (which is most often not safe):
+
+```javascript
+import { tick, html } from 'perlite';
+
+export function render(state, emit) {
+
+    // WRONG WAY - will trigger a new rendering cycle
+    // before the current one is completed
+    state.result = ...;
+
+    // RIGHT WAY - defer state change to the next rendering cycle 
+    tick(() => { 
+        state.result = ...;
+    });
+
+    return html`...`;
+}
+```
 
 #### memo(fn: (...args: any[]) => any, invalidate?: (...args: any[]) => any): (...args: any[]) => any;
 
+Creates and returns a new memoized version of the passed function that will cache the result based on its arguments. 
+
+```javascript
+import { memo } from 'perlite';
+
+function heavyFunc(foo, bar, baz) { ... }
+
+const funcMemoized = memo(heavyFunc);
+...
+funcMemoized(1, 2, 3); // executes a function, caches the result, and returns it
+...
+funcMemoized(1, 2, 3); // just a returns the result from cache
+funcMemoized(4, 5, 6); // new arguments - new execution
+funcMemoized(1, 2, 3); // still returns the result from cache
+```
+
+or use the second argument - invalidation function to provide custom cache invalidation logic:
+
+```javascript
+import { memo } from 'perlite';
+
+function heavyFunc() { ... }
+
+const funcMemoized = memo(heavyFunc, (foo, bar, baz) => {
+    // decide whether to use the cached value or re-calculate the function
+    return true;
+});
+```
+
+Invalidation function should return `true` to keep the cached result or `false` to drop the cache, and re-execute the function. Also, it can return any unique value (string, number, even a reference) which will be used instead of arguments list to cache and retrieve the result.
+
+```javascript
+const funcMemoized = memo(heavyFunc, (foo, bar, baz) => {
+    return `${foo}-${bar}-${baz.quux}`; // this will be used as a cache identifier
+});
+```
+
 #### attrToVal(str: string): any;
 
-#### camelCase(str: string): string;
+```javascript
+import { attrToVal } from 'perlite';
 
-#### dashCase(str: string): string;
+attrToVal('false'); // false
+attrToVal('undefined'); // undefined
+attrToVal('null'); // null
+attrToVal('2'); // 2
+attrToVal('{"foo":1}'); // { foo: 1 }
+```
+
+#### camelCase(str: string, pascal: boolean = false): string;
+
+```javascript
+import { camelCase } from 'perlite';
+
+camelCase('kebab-to-camel-case'); // kebabToCamelCase
+camelCase('kebab-to-pascal-case', true); // KebabToPascalCase
+```
+
+#### kebabCase(str: string): string;
+
+```javascript
+import { kebabCase } from 'perlite';
+
+kebabCase('camelToKebabCase'); // camel-to-kebab-case
+```
 
 ## ⌨️ Typescript support
 

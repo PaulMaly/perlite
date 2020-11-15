@@ -1,7 +1,7 @@
 import hr from 'hyperactiv';
 import { render, nothing } from 'lit-html';
 
-import { attrToVal, camelCase, dashCase } from './utils';
+import { attrToVal, camelCase, kebabCase } from './utils';
 
 import type * as Type from './types';
 
@@ -99,7 +99,7 @@ export const $ = (
     observer.observe(target, {
         attributeFilter: Object.entries(model).reduce((attrs, [key, val]) => {
             if (typeof val !== 'function') {
-                attrs.push(`data-${dashCase(key)}`);
+                attrs.push(`data-${kebabCase(key)}`);
             }
             return attrs;
         }, []),

@@ -1728,11 +1728,12 @@ var perlite = (function (exports) {
         }
         return str;
     }
-    function camelCase(str) {
-        return str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+    function camelCase(str, pascal = false) {
+        const camel = str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+        return pascal ? camel.replace(/^\w/, s => s.toUpperCase()) : camel;
     }
-    function dashCase(str) {
-        return str.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
+    function kebabCase(str) {
+        return str.replace(/[A-Z]/g, '-$&').toLowerCase();
     }
 
     /**
@@ -3322,7 +3323,7 @@ var perlite = (function (exports) {
         observer.observe(target, {
             attributeFilter: Object.entries(model).reduce((attrs, [key, val]) => {
                 if (typeof val !== 'function') {
-                    attrs.push(`data-${dashCase(key)}`);
+                    attrs.push(`data-${kebabCase(key)}`);
                 }
                 return attrs;
             }, []),
@@ -3391,7 +3392,6 @@ var perlite = (function (exports) {
     exports.classMap = classMap;
     exports.computed = computed$1;
     exports.createMarker = createMarker;
-    exports.dashCase = dashCase;
     exports.decorator = decorator;
     exports.defaultTemplateProcessor = defaultTemplateProcessor;
     exports.directive = directive;
@@ -3404,6 +3404,7 @@ var perlite = (function (exports) {
     exports.isIterable = isIterable;
     exports.isPrimitive = isPrimitive;
     exports.isTemplatePartActive = isTemplatePartActive;
+    exports.kebabCase = kebabCase;
     exports.live = live;
     exports.memo = memo;
     exports.noChange = noChange;

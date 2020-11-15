@@ -91,11 +91,12 @@ function attrToVal(str) {
     }
     return str;
 }
-function camelCase(str) {
-    return str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+function camelCase(str, pascal = false) {
+    const camel = str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+    return pascal ? camel.replace(/^\w/, s => s.toUpperCase()) : camel;
 }
-function dashCase(str) {
-    return str.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
+function kebabCase(str) {
+    return str.replace(/[A-Z]/g, '-$&').toLowerCase();
 }
 
 const each = (items, template, keyFn = (item) => item) => repeat$1(items, keyFn, template);
@@ -290,7 +291,7 @@ const $ = (_a, ...context) => {
     observer.observe(target, {
         attributeFilter: Object.entries(model).reduce((attrs, [key, val]) => {
             if (typeof val !== 'function') {
-                attrs.push(`data-${dashCase(key)}`);
+                attrs.push(`data-${kebabCase(key)}`);
             }
             return attrs;
         }, []),
@@ -334,4 +335,4 @@ const $$ = (_a, ...context) => {
         }, ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
 };
 
-export { $, $$, attrToVal, bind, call, camelCase, capture, computed, dashCase, decorator, dispose, each, memo, noop, observe, once, passive, prevent, ref, self, stop, tick };
+export { $, $$, attrToVal, bind, call, camelCase, capture, computed, decorator, dispose, each, kebabCase, memo, noop, observe, once, passive, prevent, ref, self, stop, tick };

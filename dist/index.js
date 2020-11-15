@@ -83,11 +83,12 @@
         }
         return str;
     }
-    function camelCase(str) {
-        return str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+    function camelCase(str, pascal = false) {
+        const camel = str.replace(/-([a-z])/g, (_, w) => w.toUpperCase());
+        return pascal ? camel.replace(/^\w/, s => s.toUpperCase()) : camel;
     }
-    function dashCase(str) {
-        return str.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
+    function kebabCase(str) {
+        return str.replace(/[A-Z]/g, '-$&').toLowerCase();
     }
 
     const each = (items, template, keyFn = (item) => item) => repeat.repeat(items, keyFn, template);
@@ -282,7 +283,7 @@
         observer.observe(target, {
             attributeFilter: Object.entries(model).reduce((attrs, [key, val]) => {
                 if (typeof val !== 'function') {
-                    attrs.push(`data-${dashCase(key)}`);
+                    attrs.push(`data-${kebabCase(key)}`);
                 }
                 return attrs;
             }, []),
@@ -446,10 +447,10 @@
     exports.camelCase = camelCase;
     exports.capture = capture;
     exports.computed = computed;
-    exports.dashCase = dashCase;
     exports.decorator = decorator;
     exports.dispose = dispose;
     exports.each = each;
+    exports.kebabCase = kebabCase;
     exports.memo = memo;
     exports.noop = noop;
     exports.observe = observe;
