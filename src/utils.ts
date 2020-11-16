@@ -23,8 +23,10 @@ export const memo = (fn: (...args: any[]) => any, invalidate?: (...args: any[]) 
         if (cache.has(key)) {
             return cache.get(key);
         }
+
         const result = fn.apply(fn, args);
         cache.set(key, result);
+
         return result;
     };
 };

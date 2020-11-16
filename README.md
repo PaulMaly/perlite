@@ -79,6 +79,10 @@ Unlike the other frontend frameworks, eg. *React*, *Vue*, *Angular* or *Svelte*,
 
 **Perlite** focuses on building **standalone** UI widgets placed across different parts of the server-generated page and provides handy tools to manage these widgets and interact between them.
 
+Built on top [**lit-html**](https://lit-html.polymer-project.org/) - an efficient, expressive, extensible HTML templating library and [**hyperactiv**](https://github.com/elbywan/hyperactiv) - a super tiny reactive library. This means that your widgets will have a reactive state with direct object mutations, super-fast DOM updates, and low memory consumption. 
+
+The full bundle size of **Perlite** library is just **8.8Kb (min+gz)**. In addition, it's optimized for tree-shaking, so you can reduce the final size if not all features are used. At the same time, **Perlite** is full-featured enough to fulfill its purposes and no additional tools you needed in most of the cases.
+
 ## 📦 Installation
 
 ### NPM
@@ -163,7 +167,7 @@ To create a new widget and append it to the page, import and call `$` constructo
 * `render` - a function representing a declarative template of the widget;
 * any [hyperactiv options](https://github.com/elbywan/hyperactiv#observe) for reactivity system (you __don't__ need to change the defaults in most cases)
 
-As an example, you can use ES6 [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) to pass widget declaration exports to the constructor.
+For example, you can use ES6 [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) to pass widget declaration exports to the constructor.
 
 ```javascript
 import { $ } from 'perlite';
@@ -536,7 +540,7 @@ off();
 
 #### $widget.render(): void;
 
-Call this function to manually re-render a widget. Usually, it's not necessary, because you need just use a state-based approach and change the reactive state to automatically perform a re-render. But sometimes you may want to force the DOM update. This function is idempotent and safe to re-call. If actual state wasn't changed, no changes in DOM will performed. 
+Call this function to manually re-render a widget. Usually, it's not necessary, because you need just use a state-driven approach and change the reactive state to automatically perform a re-render. But sometimes you may want to force the DOM update. This function is idempotent and safe to re-call. If actual state wasn't changed, no changes in DOM will performed. 
 
 #### $widget.destroy(): void;
 
