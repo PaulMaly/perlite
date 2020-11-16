@@ -55,6 +55,7 @@
         - [$$widgets.ctx(fn: (...ctx: any[]) => any): any;](https://github.com/PaulMaly/perlite#widgetsctxfn-ctx-any--any-any)
         - [$$widgets.forEach(fn: (widget: Widget, index: number, widgets: Widget[]) => void): any;](https://github.com/PaulMaly/perlite#widgetsforeachfn-widget-widget-index-number-widgets-widget--void-void)
 - [Advanced usage](https://github.com/PaulMaly/perlite#-advanced-usage)
+    - [Setting the initial widget state during SSR](https://github.com/PaulMaly/perlite#setting-the-initial-widget-state-during-ssr)
     - [Directives](https://github.com/PaulMaly/perlite#directives)
         - [Lit-html directives](https://github.com/PaulMaly/perlite#lit-html-directives)
         - [Lists & keys](https://github.com/PaulMaly/perlite#lists--keys)
@@ -611,6 +612,34 @@ $$widgets.forEach($widget => {
 ```
 
 ## 🛠 Advanced usage
+
+### Setting the initial widget state during SSR
+
+Most often, you will need some initial widget state to be set by the server during page rendering. Just use `data-attributes` on widget `target` element and render necessary values there. For example, using **PHP** templating:
+
+```php
+<div 
+    id="myWidget"
+    data-string="<?=$strVal?>" 
+    data-number="<?=$numVal?>" 
+    data-boolean="<?=$boolVal?>" 
+    data-null="<?=$nullVal?>" 
+    data-json="<?=$jsonVal?>"
+></div>
+```
+
+All `data-attributes` that matched declared widget state (in widget declaration) will be picked up and applied to the widget during creation. Note: to be properly matched, attributes names should be in *kebab-case*, and widget state properties names should be in *camelCase*. For more info, check how [`kebabCase()`](https://github.com/PaulMaly/perlite#kebabcasestr-string-string) and [`camelCase()`](https://github.com/PaulMaly/perlite#camelcasestr-string-pascal-boolean--false-string) functions works.
+
+Regardless, that attribute values are always strings, some types will be automatically converted to the corresponding JS types (eg. boolean, number, null/undefined and even json. For more info, check how [`attrToVal()`](https://github.com/PaulMaly/perlite#attrtovalstr-string-any) function works.
+
+Moreover, your external client-side code is also able to change `data-attributes` of widget target node directly like this:
+
+```javascript
+const myWidgetTarget = document.getElementByID('myWidget');
+myWidgetTarget.setAttribute('data-string', 'hello world');
+```
+
+and these changes will also be applied to the widget state at any moment it occurs and DOM will be triggered to update as well. It's useful in cases when some part of your code doesn't have deirect access to the widget object and its reactive state.
 
 ### Directives
 
