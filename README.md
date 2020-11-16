@@ -11,7 +11,7 @@
 
 ## 🚩 Table of contents
 
-- [Description & Features](https://github.com/PaulMaly/perlite#-features).
+- [Description & Features](https://github.com/PaulMaly/perlite#-description--features).
 - [Installation](https://github.com/PaulMaly/perlite#-installation)
     - [NPM](https://github.com/PaulMaly/perlite#npm)
     - [CDN](https://github.com/PaulMaly/perlite#cdn)
@@ -22,44 +22,44 @@
     - [Widget multiple instantiation](https://github.com/PaulMaly/perlite#widget-multiple-instantiation)
     - [Widget container](https://github.com/PaulMaly/perlite#widget-container)
     - [Widget state](https://github.com/PaulMaly/perlite#widget-state)
-        - [Reactivity system]()
+        - [Reactivity system](https://github.com/PaulMaly/perlite#reactivity-system)
     - [Widget template](https://github.com/PaulMaly/perlite#widget-template)
-        - [Template syntax]()
-        - [Using expressions]()
-        - [Text bindings]()
-        - [Attribute bindings]()
-        - [Event listeners]()
-        - [Template fragments]()
-        - [Control flow]()
-            - [Conditions]()
-            - [Looping]()        
-        - [Rendering]()
+        - [Template syntax](https://github.com/PaulMaly/perlite#template-syntax)
+        - [Text bindings](https://github.com/PaulMaly/perlite#text-bindings)
+        - [Using expressions](https://github.com/PaulMaly/perlite#using-expressions)
+        - [Attribute bindings](https://github.com/PaulMaly/perlite#attribute-bindings)
+        - [Event listeners](https://github.com/PaulMaly/perlite#event-listeners)
+        - [Template fragments](https://github.com/PaulMaly/perlite#template-fragments)
+        - [Control flow](https://github.com/PaulMaly/perlite#control-flow)
+            - [Conditions](https://github.com/PaulMaly/perlite#conditions)
+            - [Looping](https://github.com/PaulMaly/perlite#looping)        
+        - [Rendering](https://github.com/PaulMaly/perlite#rendering)
     - [Widget lifecycle events](https://github.com/PaulMaly/perlite#widget-lifecycle-events)
     - [Widget API](https://github.com/PaulMaly/perlite#widget-api)
-        - [$widget.target: HTMLElement | Node;]()
-        - [$widget.state: ProxyConstructor;]()
-        - [$widget.model: object;]()
-        - [$widget.effect(fn: () => void, opts?: object): () => void;]()
-        - [$widget.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): () => void;]()
-        - [$widget.render(): void;]()
-        - [$widget.destroy(): void;]()
-        - [$widget.ctx(fn: (...ctx: any[]) => any): any;]()
+        - [$widget.target: HTMLElement | Node;](https://github.com/PaulMaly/perlite#widgettarget-htmlelement--node)
+        - [$widget.state: ProxyConstructor;](https://github.com/PaulMaly/perlite#widgetstate-proxyconstructor)
+        - [$widget.model: object;](https://github.com/PaulMaly/perlite#widgetmodel-object)
+        - [$widget.effect(fn: () => void, opts?: object): () => void;](https://github.com/PaulMaly/perlite#widgeteffectfn---void-opts-object---void)
+        - [$widget.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): () => void;](https://github.com/PaulMaly/perlite#widgetontype-string-fn-e-customevent--void-opts-object--boolean---void)
+        - [$widget.render(): void;](https://github.com/PaulMaly/perlite#widgetrender-void)
+        - [$widget.destroy(): void;](https://github.com/PaulMaly/perlite#widgetdestroy-void)
+        - [$widget.ctx(fn: (...ctx: any[]) => any): any;](https://github.com/PaulMaly/perlite#widgetctxfn-ctx-any--any-any)
     - [Widget container API](https://github.com/PaulMaly/perlite#widget-container-api)
-        - [$$widgets[index: number]: Widget;]()
-        - [$$widgets.target: NodeList | Node[];]()
-        - [$$widgets.state(fn: (state: ProxyConstructor) => void): void;]()
-        - [$$widgets.effect(fn: (state: ProxyConstructor) => () => void, opts?: object): (() => void)[];]()
-        - [$$widgets.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): (() => void)[];]()
-        - [$$widgets.render(): void;]()
-        - [$$widgets.destroy(): void;]()
-        - [$$widgets.ctx(fn: (...ctx: any[]) => any): any;]()
-        - [$$widgets.forEach(fn: (widget: Widget, index: number, widgets: Widget[]) => void): any;]()
+        - [$$widgets[index: number]: Widget;](https://github.com/PaulMaly/perlite#widgetsindex-number-widget)
+        - [$$widgets.target: NodeList | Node[];](https://github.com/PaulMaly/perlite#widgetstarget-nodelist--node)
+        - [$$widgets.state(fn: (state: ProxyConstructor) => void): void;](https://github.com/PaulMaly/perlite#widgetsstatefn-state-proxyconstructor--void-void)
+        - [$$widgets.effect(fn: (state: ProxyConstructor) => () => void, opts?: object): (() => void)[];](https://github.com/PaulMaly/perlite#widgetseffectfn-state-proxyconstructor----void-opts-object---void)
+        - [$$widgets.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): (() => void)[];](https://github.com/PaulMaly/perlite#widgetsontype-string-fn-e-customevent--void-opts-object--boolean---void)
+        - [$$widgets.render(): void;](https://github.com/PaulMaly/perlite#widgetsrender-void)
+        - [$$widgets.destroy(): void;](https://github.com/PaulMaly/perlite#widgetsdestroy-void)
+        - [$$widgets.ctx(fn: (...ctx: any[]) => any): any;](https://github.com/PaulMaly/perlite#widgetsctxfn-ctx-any--any-any)
+        - [$$widgets.forEach(fn: (widget: Widget, index: number, widgets: Widget[]) => void): any;](https://github.com/PaulMaly/perlite#widgetsforeachfn-widget-widget-index-number-widgets-widget--void-void)
 - [Advanced usage](https://github.com/PaulMaly/perlite#-advanced-usage)
     - [Directives](https://github.com/PaulMaly/perlite#directives)
-        - [Lit-html directives]()
-        - [Lists & keys]()
-        - [Event listener modifiers]()
-        - [Refs & decorators]()
+        - [Lit-html directives](https://github.com/PaulMaly/perlite#lit-html-directives)
+        - [Lists & keys](https://github.com/PaulMaly/perlite#lists--keys)
+        - [Event listener modifiers](https://github.com/PaulMaly/perlite#event-listener-modifiers)
+        - [Refs & decorators](https://github.com/PaulMaly/perlite#refs--decorators)
     - [Custom directive](https://github.com/PaulMaly/perlite#custom-directives)
     - [Widget context](https://github.com/PaulMaly/perlite#widget-context)
     - [Widget nesting](https://github.com/PaulMaly/perlite#widget-nesting)
@@ -466,8 +466,25 @@ These events are pre-defined and emitted on `target` node as the other widget cu
 + `state` - fires on every state change, before DOM update;
 + `update` - fires on every DOM updated, after `state` event;
 + `destroy` - fires once when the component is removed from the DOM;
++ `error` - fires on exception occur during the rendering cycle;
 
-Each life-cycle event receives a [`model`]() of the widget in `event.detail`. This state is not reactive and its changes won't trigger widget re-rendering. If you *really* need to start new rendering cycle from a life-cycle event handler (basically, you shouldn't do that), you can use reactive [`state`]() or manual call [`render()`]() function via widget object.
+Each life-cycle event, except `error`, receives a [`model`]() of the widget in `event.detail`. This state is not reactive and its changes won't trigger widget re-rendering. If you *really* need to start new DOM update cycle from a life-cycle event handler (basically, you shouldn't do that), you can use reactive [`state`]() or manual call [`render()`]() function via widget object. 
+
+In difference with the other life-cycle events, `error` event receives an exception in `event.detail`.
+
+```javascript
+$widget.on('update', e => {
+    console.log('Widget DOM updated. The current model is: ', e.detail);
+});
+
+$widget.on('destroy', e => {
+    console.log('Widget is destroyed.');
+});
+
+$widget.on('error', e => {
+    console.error(e.detail.message);
+});
+```
 
 ### Widget API
 
@@ -553,7 +570,11 @@ WIP
 
 #### $$widgets[index: number]: Widget;
 
+Gets any widget by index in the order of `target` list provided on the creation of the container.
+
 #### $$widgets.target: NodeList | Node[];
+
+The original list of `targets` of the container widgets.
 
 #### $$widgets.state(fn: (state: ProxyConstructor) => void): void;
 
@@ -561,13 +582,29 @@ WIP
 
 #### $$widgets.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): (() => void)[];
 
+Works almost the same as [`on()`]() function of a single widget but add events listener to every widget inside the container.
+
 #### $$widgets.render(): void;
+
+Works almost the same as [`render()`]() function of a single widget but apply re-render to every widget inside the container.
 
 #### $$widgets.destroy(): void;
 
+Works almost the same as [`render()`]() function of a single widget but destroy all widgets inside the container.
+
 #### $$widgets.ctx(fn: (...ctx: any[]) => any): any;
 
+Equal to [`ctx()`]() function of a single widget. All widgets inside the container share the same context values.
+
 #### $$widgets.forEach(fn: (widget: Widget, index: number, widgets: Widget[]) => void): void;
+
+Use it for looping through all the widgets inside the container:
+
+```javascript
+$$widgets.forEach($widget => {
+    // do something with each widget
+});
+```
 
 ## 🛠 Advanced usage
 
@@ -577,7 +614,23 @@ WIP
 
 #### Lit-html directives
 
-WIP
+**Perlite** re-exports all **lit-html** built-in directives:
+
++ repeat
++ cache
++ until
++ live
++ guard
++ class-map
++ style-map
++ if-defined
++ async-append
++ async-replace
++ template-content
++ unsafe-html
++ unsafe-svg
+
+Follow the **lit-html** [guide](https://lit-html.polymer-project.org/guide/template-reference#built-in-directives) to lean how to use them.
 
 #### Lists & keys
 
@@ -809,7 +862,7 @@ WIP
 
 #### tick(fn?: () => any): Promise<undefined>;
 
-Defer the callback to be executed after the next DOM update cycle. Use it immediately after you’ve changed some data to wait for the DOM update:
+Defer the code to be executed after the next DOM update cycle. Use it immediately after you’ve changed some data to wait for the DOM update:
 
 ```javascript
 import { tick } from 'perlite';
@@ -828,11 +881,11 @@ import { tick, html } from 'perlite';
 
 export function render(state, emit) {
 
-    // WRONG WAY - will trigger a new rendering cycle
+    // WRONG WAY - will trigger a new DOM update cycle
     // before the current one is completed
     state.result = ...;
 
-    // RIGHT WAY - defer state change to the next rendering cycle 
+    // RIGHT WAY - defer state change to the next DOM update cycle 
     tick(() => { 
         state.result = ...;
     });
@@ -859,7 +912,7 @@ funcMemoized(4, 5, 6); // new arguments - new execution
 funcMemoized(1, 2, 3); // still returns the result from cache
 ```
 
-or use the second argument - invalidation function to provide custom cache invalidation logic:
+or use the second argument, function which provides custom cache invalidation logic:
 
 ```javascript
 import { memo } from 'perlite';

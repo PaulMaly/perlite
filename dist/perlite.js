@@ -3211,21 +3211,24 @@ var perlite = (function (exports) {
         if (!(part instanceof EventPart)) {
             throw new Error('"capture" directive can only be used in event listeners');
         }
-        part.setValue({ handleEvent, capture: true });
+        part.setValue(typeof handleEvent === 'object' ? Object.assign(Object.assign({}, handleEvent), { capture: true }) :
+            { handleEvent, capture: true });
     });
 
     const once = directive((handleEvent) => (part) => {
         if (!(part instanceof EventPart)) {
             throw new Error('"once" directive can only be used in event listeners');
         }
-        part.setValue({ handleEvent, once: true });
+        part.setValue(typeof handleEvent === 'object' ? Object.assign(Object.assign({}, handleEvent), { once: true }) :
+            { handleEvent, once: true });
     });
 
     const passive = directive((handleEvent) => (part) => {
         if (!(part instanceof EventPart)) {
             throw new Error('"passive" directive can only be used in event listeners');
         }
-        part.setValue({ handleEvent, passive: true });
+        part.setValue(typeof handleEvent === 'object' ? Object.assign(Object.assign({}, handleEvent), { passive: true }) :
+            { handleEvent, passive: true });
     });
 
     const prevent = directive((handleEvent) => (part) => {
@@ -3282,7 +3285,9 @@ var perlite = (function (exports) {
             if (mounted && !document.contains(target))
                 return destroy();
             emit('state', model);
-            return Promise.resolve().then(() => computeAsync(rerender));
+            return Promise.resolve()
+                .then(() => computeAsync(rerender))
+                .catch(err => emit('error', err));
         });
         const events = new Set();
         const on = (type, fn, opts) => {
@@ -3333,7 +3338,6 @@ var perlite = (function (exports) {
             subtree: false
         });
         const destroy = () => {
-            emit('destroy', model);
             observer.disconnect();
             dispose$1(renderer);
             effects.forEach((cancel) => cancel());
@@ -3341,6 +3345,7 @@ var perlite = (function (exports) {
             events.forEach((off) => off());
             events.clear();
             target.innerHTML = '';
+            emit('destroy', model);
         };
         const ctx = (fn) => fn(...context);
         return {
@@ -3351,7 +3356,7 @@ var perlite = (function (exports) {
             effect,
             target,
             destroy,
-            render: rerender
+            render: rerender,
         };
     };
     const $$ = (_a, ...context) => {
@@ -3362,7 +3367,13 @@ var perlite = (function (exports) {
         const widgets = Array.prototype.map.call(target, (target) => {
             return $(Object.assign(Object.assign({}, config), { target }), ...context);
         });
-        return Object.assign(Object.assign({}, widgets), { effect: (fn, opts) => widgets.map((widget) => widget.effect(fn(widget.state), opts)), on: (...args) => widgets.map((widget) => widget.on(...args)), destroy: () => widgets.forEach((widget) => widget.destroy()), render: () => widgets.forEach((widget) => widget.render()), state: (fn) => {
+        return Object.assign(Object.assign({}, widgets), { effect: (fn, opts) => {
+                const cancels = widgets.map((widget) => widget.effect(fn(widget.state), opts));
+                return () => cancels.forEach(cancel => cancel());
+            }, on: (...args) => {
+                const offs = widgets.map((widget) => widget.on(...args));
+                return () => offs.forEach(off => off());
+            }, destroy: () => widgets.forEach((widget) => widget.destroy()), render: () => widgets.forEach((widget) => widget.render()), state: (fn) => {
                 widgets.forEach((widget) => fn(widget.state));
             }, ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
     };

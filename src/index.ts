@@ -54,7 +54,9 @@ export const $ = (
     const renderer = computed(({ computeAsync }) => {
         if (mounted && !document.contains(target)) return destroy();
         emit('state', model);
-        return Promise.resolve().then(() => computeAsync(rerender));
+        return Promise.resolve()
+            .then(() => computeAsync(rerender))
+            .catch(err => emit('error', err));
     });
 
     const events = new Set();
@@ -110,7 +112,7 @@ export const $ = (
     });
 
     const destroy = () => {
-        emit('destroy', model);
+
         observer.disconnect();
         dispose(renderer);
         effects.forEach((cancel: () => any) => cancel());
@@ -118,6 +120,7 @@ export const $ = (
         events.forEach((off: () => any) => off());
         events.clear();
         target.innerHTML = ''; // is this the best way to clean up the DOM?
+        emit('destroy', model);
     };
 
     const ctx = (fn: (...ctx: any[]) => any) => fn(...context);
@@ -130,7 +133,7 @@ export const $ = (
         effect,
         target,
         destroy,
-        render: rerender
+        render: rerender,
     };
 };
 
@@ -145,8 +148,14 @@ export const $$ = ({ target, ...config }: Type.Configs, ...context): Type.Widget
 
     return {
         ...widgets,
-        effect: (fn, opts): [] => widgets.map((widget: Type.Widget) => widget.effect(fn(widget.state), opts)),
-        on: (...args): [] => widgets.map((widget: Type.Widget) => widget.on(...args)),
+        effect: (fn, opts): () => void => {
+            const cancels = widgets.map((widget: Type.Widget) => widget.effect(fn(widget.state), opts));
+            return () => cancels.forEach(cancel => cancel());
+        },
+        on: (...args): () => void => {
+            const offs = widgets.map((widget: Type.Widget) => widget.on(...args));
+            return () => offs.forEach(off => off());
+        },
         destroy: (): void => widgets.forEach((widget: Type.Widget) => widget.destroy()),
         render: (): void => widgets.forEach((widget: Type.Widget) => widget.render()),
         state: (fn: (state: ProxyConstructor) => void): void => {
@@ -154,6 +163,6 @@ export const $$ = ({ target, ...config }: Type.Configs, ...context): Type.Widget
         },
         ctx: (fn: (...ctx: any[]) => any) => fn(...context),
         forEach: Array.prototype.forEach.bind(widgets),
-        target
+        target,
     };
 };

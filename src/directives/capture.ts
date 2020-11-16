@@ -6,5 +6,8 @@ export const capture = directive((handleEvent) => (part) => {
         throw new Error('"capture" directive can only be used in event listeners');
     }
 
-    part.setValue({ handleEvent, capture: true });
+    part.setValue(typeof handleEvent === 'object' ?
+        { ...handleEvent, capture: true } :
+        { handleEvent, capture: true }
+    );
 });

@@ -6,5 +6,8 @@ export const passive = directive((handleEvent) => (part) => {
         throw new Error('"passive" directive can only be used in event listeners');
     }
 
-    part.setValue({ handleEvent, passive: true });
+    part.setValue(typeof handleEvent === 'object' ?
+        { ...handleEvent, passive: true } :
+        { handleEvent, passive: true }
+    );
 });

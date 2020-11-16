@@ -24,8 +24,8 @@ export declare type Widget = {
 export declare type Widgets = {
     [key: number]: Widget;
     target: Targets;
-    on: (type: string, fn: (e: CustomEvent) => void, opts?: object | boolean) => (() => void)[];
-    effect: (fn: (state: ProxyConstructor) => () => void, opts?: object) => (() => void)[];
+    on: (type: string, fn: (e: CustomEvent) => void, opts?: object | boolean) => () => void;
+    effect: (fn: (state: ProxyConstructor) => () => void, opts?: object) => () => void;
     state: (fn: (state: ProxyConstructor) => void) => void;
     ctx: (fn: (...ctx: any[]) => any) => any;
     destroy: () => void;

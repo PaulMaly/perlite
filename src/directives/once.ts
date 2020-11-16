@@ -6,5 +6,8 @@ export const once = directive((handleEvent) => (part) => {
         throw new Error('"once" directive can only be used in event listeners');
     }
 
-    part.setValue({ handleEvent, once: true });
+    part.setValue(typeof handleEvent === 'object' ?
+        { ...handleEvent, once: true } :
+        { handleEvent, once: true }
+    );
 });
