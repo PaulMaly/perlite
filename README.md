@@ -16,13 +16,15 @@
     - [NPM](https://github.com/PaulMaly/perlite#npm)
     - [CDN](https://github.com/PaulMaly/perlite#cdn)
     - [Distribution](https://github.com/PaulMaly/perlite#distribution)
+- [Examples](https://github.com/PaulMaly/perlite#-examples)
 - [Basic usage](https://github.com/PaulMaly/perlite#-basic-usage)
     - [Widget declaration](https://github.com/PaulMaly/perlite#widget-declaration)
     - [Widget creation](https://github.com/PaulMaly/perlite#widget-creation)
     - [Widget multiple instantiation](https://github.com/PaulMaly/perlite#widget-multiple-instantiation)
     - [Widget container](https://github.com/PaulMaly/perlite#widget-container)
     - [Widget state](https://github.com/PaulMaly/perlite#widget-state)
-        - [Reactivity system](https://github.com/PaulMaly/perlite#reactivity-system)
+        - [Reactivity](https://github.com/PaulMaly/perlite#reactivity)
+        - [Actions](https://github.com/PaulMaly/perlite#actions)
     - [Widget template](https://github.com/PaulMaly/perlite#widget-template)
         - [Template syntax](https://github.com/PaulMaly/perlite#template-syntax)
         - [Text bindings](https://github.com/PaulMaly/perlite#text-bindings)
@@ -138,6 +140,16 @@ CDNs: [UNPKG](https://unpkg.com/perlite/) | [jsDelivr](https://cdn.jsdelivr.net/
 + `dist/perlite.mjs` - ESM bundle
 + `dist/perlite.min.js` - IIFE bundle (minified)
 + `dist/perlite.min.mjs` - ESM bundle (minified)
+
+## 🕹 Examples
+
+### TodoMVC
+
+[Simple server-rendered shop catalog page with multiple client-side widgets](https://github.com/PaulMaly/perlite/tree/main/examples/todomvc)
+
+### Simple Shop
+
+[Basic TodoMVC app with single widget, multiple fragments and store with actions](https://github.com/PaulMaly/perlite/tree/main/examples/shop)
 
 ## 🔨 Basic usage
 
@@ -282,7 +294,11 @@ $$widgets.forEach(widget => {
 
 WIP
 
-#### Reactivity system
+#### Reactivity
+
+WIP
+
+#### Actions
 
 WIP
 
@@ -856,9 +872,7 @@ const userSubscription = computed(() => {
 dispose(userSubscription);
 ```
 
-Use `computed` function to subscribe to the store properties changes and perform any operations or side-effects. Dependencies are automatically tracked so you don't need to explicitly declare anything - just use the properties you need. 
-
-Don't forget to dispose of a subscription if you no longer need it. Read more about these things in [hyperactiv guide](https://github.com/elbywan/hyperactiv#usage).
+Use `computed` function to subscribe to the store properties changes and perform any operations or side-effects. Dependencies are automatically tracked so you don't need to explicitly declare anything - just use the properties you need. Don't forget to dispose of a subscription if you no longer need it. Read more about these things in [hyperactiv guide](https://github.com/elbywan/hyperactiv#usage).
 
 Just import the store to use it in a widget:
 
