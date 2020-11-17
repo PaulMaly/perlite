@@ -1,1 +1,1 @@
-export declare const self: (handleEvent: any) => (part: any) => void;
+export declare const self: (handler: any) => (part: any) => void;

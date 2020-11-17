@@ -3231,33 +3231,37 @@ var perlite = (function (exports) {
             { handleEvent, passive: true });
     });
 
-    const prevent = directive((handleEvent) => (part) => {
+    const prevent = directive((handler) => (part) => {
         if (!(part instanceof EventPart)) {
             throw new Error('"prevent" directive can only be used in event listeners');
         }
-        part.setValue(function (event) {
-            event.preventDefault();
-            handleEvent.call(this, event);
-        });
+        const { handleEvent } = handler, options = __rest(handler, ["handleEvent"]);
+        part.setValue(Object.assign({ handleEvent: function (event) {
+                event.preventDefault();
+                (handleEvent || handler).call(this, event);
+            } }, options));
     });
 
-    const stop = directive((handleEvent, immediate = false) => (part) => {
+    const stop = directive((handler, immediate = false) => (part) => {
         if (!(part instanceof EventPart)) {
             throw new Error('"stop" directive can only be used in event listeners');
         }
-        part.setValue(function (event) {
-            immediate ? event.stopImmediatePropagation() : event.stopPropagation();
-            handleEvent.call(this, event);
-        });
+        const { handleEvent } = handler, options = __rest(handler, ["handleEvent"]);
+        part.setValue(Object.assign({ handleEvent: function (event) {
+                immediate ? event.stopImmediatePropagation() : event.stopPropagation();
+                (handleEvent || handler).call(this, event);
+            } }, options));
     });
 
-    const self = directive((handleEvent) => (part) => {
+    const self = directive((handler) => (part) => {
         if (!(part instanceof EventPart)) {
             throw new Error('"self" directive can only be used in event listeners');
         }
-        part.setValue(function (event) {
-            (event.target === this) && handleEvent.call(this, event);
-        });
+        const { handleEvent } = handler, options = __rest(handler, ["handleEvent"]);
+        part.setValue(Object.assign({ handleEvent: function (event) {
+                (event.target === event.currentTarget)
+                    && (handleEvent || handler).call(this, event);
+            } }, options));
     });
 
     const { observe: observe$1, computed: computed$1, dispose: dispose$1 } = hr;

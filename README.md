@@ -639,7 +639,7 @@ const myWidgetTarget = document.getElementByID('myWidget');
 myWidgetTarget.setAttribute('data-string', 'hello world');
 ```
 
-and these changes will also be applied to the widget state at any moment it occurs and DOM will be triggered to update as well. It's useful in cases when some part of your code doesn't have deirect access to the widget object and its reactive state.
+and these changes will also be applied to the widget state at any moment it occurs and DOM will be triggered to update as well. It's strongly not recommended, but can be useful in cases when some part of your code doesn't have direct access to the widget object and its reactive state.
 
 ### Directives
 

@@ -1,1 +1,1 @@
-export declare const prevent: (handleEvent: any) => (part: any) => void;
+export declare const prevent: (handler: any) => (part: any) => void;

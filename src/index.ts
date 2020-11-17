@@ -112,12 +112,11 @@ export const $ = (
     });
 
     const destroy = () => {
-
         observer.disconnect();
         dispose(renderer);
-        effects.forEach((cancel: () => any) => cancel());
+        effects.forEach((cancel: () => void) => cancel());
         effects.clear();
-        events.forEach((off: () => any) => off());
+        events.forEach((off: () => void) => off());
         events.clear();
         target.innerHTML = ''; // is this the best way to clean up the DOM?
         emit('destroy', model);
