@@ -1,6 +1,6 @@
 import { html, each } from 'https://unpkg.com/perlite@latest/dist/perlite.min.mjs';
 
-import products from '../stores/products.js';
+import products$ from '../stores/products.js';
 
 export function state() {
     return {
@@ -27,9 +27,8 @@ export function state() {
 }
 
 export function render(state) {
-
     const productIds = Object.keys(state.entries).map(id => +id);
-    const productsInCart = products.filter(product => productIds.includes(product.id));
+    const productsInCart = products$.filter(product => productIds.includes(product.id));
 
     return html`
         <button 

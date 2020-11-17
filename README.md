@@ -7,7 +7,7 @@
 
 > hy**per**activ 🌋 + **lit**-html ☄️ + **e**xtensions 🌊 = **perlite** 💎.
 
-**Perlite** is a **simple** and **declarative** way to create rich client-side widgets designed with server-side apps in mind. Completely based on native/vanilla Javascript standards and doesn't require additional build steps or compilation.
+**Perlite** is a **simple** and **declarative** way to create rich client-side widgets designed with server-side apps in mind. Completely based on native/vanilla Javascript standards and doesn't require additional build steps or compilation. Plays well with server-side rendered apps and [micro-frontends](https://micro-frontends.org/). For more details read the [description](https://github.com/PaulMaly/perlite#-description--features).
 
 ## 🚩 Table of contents
 
@@ -684,7 +684,7 @@ import {
 html`
     <form @submit=${prevent(e => { ... })}>
         ...
-        <button @click=${once(self(e => { ... }))}>
+        <button @click=${self(once(e => { ... }))}>
             Submit
         </button>
     </form>
@@ -860,7 +860,7 @@ Use `computed` function to subscribe to the store properties changes and perform
 
 Don't forget to dispose of a subscription if you no longer need it. Read more about these things in [hyperactiv guide](https://github.com/elbywan/hyperactiv#usage).
 
-You able to use stores inside of widget just by importing them:
+Just import the store to use it in a widget:
 
 ```javascript
 import store$ from './store.js'
@@ -875,13 +875,7 @@ function render(state, emit) {
 }
 ```
 
-But to re-render the widget when a store has changed, you should manually subscribe and call `render()` function somewhere outside of widget declaration:
-
-```javascript
-computed(() => store$ && $widget.render());
-...
-store$.user = user; // now it will re-render the widget 
-```
+The widget will be automatically updated when store values have changed.
 
 ### Styling
 
