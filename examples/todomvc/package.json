@@ -4,14 +4,17 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "sirv --dev ./",
+    "start": "es-dev-server --app-index index.html --node-resolve --watch --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "sirv-cli": "^1.0.8",
+    "perlite": "^1.1.1",
     "todomvc-app-css": "^2.3.0",
     "todomvc-common": "^1.0.5"
+  },
+  "devDependencies": {
+    "es-dev-server": "^1.57.8"
   }
 }

@@ -1,31 +1,6 @@
 var perlite = (function (exports) {
     'use strict';
 
-    /*! *****************************************************************************
-    Copyright (c) Microsoft Corporation.
-
-    Permission to use, copy, modify, and/or distribute this software for any
-    purpose with or without fee is hereby granted.
-
-    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-    AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-    PERFORMANCE OF THIS SOFTWARE.
-    ***************************************************************************** */
-    function __rest(s, e) {
-      var t = {};
-
-      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-
-      if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-        if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
-      }
-      return t;
-    }
-
     const BIND_IGNORED = ['String', 'Number', 'Object', 'Array', 'Boolean', 'Date'];
     function isObj(object) {
       return object && typeof object === 'object';
@@ -3211,7 +3186,8 @@ var perlite = (function (exports) {
         if (!(part instanceof EventPart)) {
             throw new Error('"capture" directive can only be used in event listeners');
         }
-        part.setValue(typeof handleEvent === 'object' ? Object.assign(Object.assign({}, handleEvent), { capture: true }) :
+        part.setValue(typeof handleEvent === 'object' ?
+            { ...handleEvent, capture: true } :
             { handleEvent, capture: true });
     });
 
@@ -3219,7 +3195,8 @@ var perlite = (function (exports) {
         if (!(part instanceof EventPart)) {
             throw new Error('"once" directive can only be used in event listeners');
         }
-        part.setValue(typeof handleEvent === 'object' ? Object.assign(Object.assign({}, handleEvent), { once: true }) :
+        part.setValue(typeof handleEvent === 'object' ?
+            { ...handleEvent, once: true } :
             { handleEvent, once: true });
     });
 
@@ -3227,7 +3204,8 @@ var perlite = (function (exports) {
         if (!(part instanceof EventPart)) {
             throw new Error('"passive" directive can only be used in event listeners');
         }
-        part.setValue(typeof handleEvent === 'object' ? Object.assign(Object.assign({}, handleEvent), { passive: true }) :
+        part.setValue(typeof handleEvent === 'object' ?
+            { ...handleEvent, passive: true } :
             { handleEvent, passive: true });
     });
 
@@ -3235,44 +3213,57 @@ var perlite = (function (exports) {
         if (!(part instanceof EventPart)) {
             throw new Error('"prevent" directive can only be used in event listeners');
         }
-        const { handleEvent } = handler, options = __rest(handler, ["handleEvent"]);
-        part.setValue(Object.assign({ handleEvent: function (event) {
+        const { handleEvent, ...options } = handler;
+        part.setValue({
+            handleEvent: function (event) {
                 event.preventDefault();
                 (handleEvent || handler).call(this, event);
-            } }, options));
+            },
+            ...options
+        });
     });
 
     const stop = directive((handler, immediate = false) => (part) => {
         if (!(part instanceof EventPart)) {
             throw new Error('"stop" directive can only be used in event listeners');
         }
-        const { handleEvent } = handler, options = __rest(handler, ["handleEvent"]);
-        part.setValue(Object.assign({ handleEvent: function (event) {
+        const { handleEvent, ...options } = handler;
+        part.setValue({
+            handleEvent: function (event) {
                 immediate ? event.stopImmediatePropagation() : event.stopPropagation();
                 (handleEvent || handler).call(this, event);
-            } }, options));
+            },
+            ...options
+        });
     });
 
     const self = directive((handler) => (part) => {
         if (!(part instanceof EventPart)) {
             throw new Error('"self" directive can only be used in event listeners');
         }
-        const { handleEvent } = handler, options = __rest(handler, ["handleEvent"]);
-        part.setValue(Object.assign({ handleEvent: function (event) {
+        const { handleEvent, ...options } = handler;
+        part.setValue({
+            handleEvent: function (event) {
                 (event.target === event.currentTarget)
                     && (handleEvent || handler).call(this, event);
-            } }, options));
+            },
+            ...options
+        });
     });
 
     const { observe: observe$1, computed: computed$1, dispose: dispose$1 } = hr;
-    const $ = (_a, ...context) => {
-        var { render: template = () => nothing, state: data = {}, target = document.body } = _a, options = __rest(_a, ["render", "state", "target"]);
+    const $ = ({ render: template = () => nothing, state: data = {}, target = document.body, ...options }, ...context) => {
         const model = (typeof data === 'function') ? data(...context) : data;
         Object.entries(target.dataset).forEach(([key, value]) => {
             if (key in model)
                 model[key] = attrToVal(value);
         });
-        const state = observe$1(model, Object.assign({ batch: true, deep: true, bind: true }, options));
+        const state = observe$1(model, {
+            batch: true,
+            deep: true,
+            bind: true,
+            ...options
+        });
         const emit = (type, detail, { bubbles = false, cancelable = true } = {}) => {
             target.dispatchEvent(new CustomEvent(type, { detail, bubbles, cancelable }));
         };
@@ -3363,23 +3354,32 @@ var perlite = (function (exports) {
             render: rerender,
         };
     };
-    const $$ = (_a, ...context) => {
-        var { target } = _a, config = __rest(_a, ["target"]);
+    const $$ = ({ target, ...config }, ...context) => {
         if (!target.length) {
             target = [target];
         }
         const widgets = Array.prototype.map.call(target, (target) => {
-            return $(Object.assign(Object.assign({}, config), { target }), ...context);
+            return $({ ...config, target }, ...context);
         });
-        return Object.assign(Object.assign({}, widgets), { effect: (fn, opts) => {
+        return {
+            ...widgets,
+            effect: (fn, opts) => {
                 const cancels = widgets.map((widget) => widget.effect(fn(widget.state), opts));
                 return () => cancels.forEach(cancel => cancel());
-            }, on: (...args) => {
+            },
+            on: (...args) => {
                 const offs = widgets.map((widget) => widget.on(...args));
                 return () => offs.forEach(off => off());
-            }, destroy: () => widgets.forEach((widget) => widget.destroy()), render: () => widgets.forEach((widget) => widget.render()), state: (fn) => {
+            },
+            destroy: () => widgets.forEach((widget) => widget.destroy()),
+            render: () => widgets.forEach((widget) => widget.render()),
+            state: (fn) => {
                 widgets.forEach((widget) => fn(widget.state));
-            }, ctx: (fn) => fn(...context), forEach: Array.prototype.forEach.bind(widgets), target });
+            },
+            ctx: (fn) => fn(...context),
+            forEach: Array.prototype.forEach.bind(widgets),
+            target,
+        };
     };
 
     exports.$ = $;

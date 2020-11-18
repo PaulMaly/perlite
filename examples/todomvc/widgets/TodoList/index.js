@@ -1,4 +1,4 @@
-import { html, each, nothing } from 'https://unpkg.com/perlite@latest/dist/perlite.min.mjs';
+import { html, each, nothing } from 'perlite';
 
 import todos$, { toggleAll } from '../../stores/todos.js';
 import { newTodo, todoItem, filters } from './fragments.js';
@@ -23,9 +23,9 @@ export function render(state) {
   return html`
     ${newTodo()}
     ${todos$.length > 0
-    ? html`
+      ? html`
     <section class="main">
-      <input @change=${e => toggleAll(!!e.target.checked)}
+      <input @change=${e=> toggleAll(!!e.target.checked)}
       ?checked=${isAllCompleted}
       type="checkbox"
       id="toggle-all"
@@ -37,7 +37,7 @@ export function render(state) {
       </ul>
       ${filters(state, { numActive, numCompleted })}
     </section>
-    `
-    : nothing}
+    ` : nothing}
+    </section>
   `;
 }

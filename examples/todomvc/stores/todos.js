@@ -1,4 +1,4 @@
-import { observe, computed } from 'https://unpkg.com/perlite@latest/dist/perlite.min.mjs';
+import { observe, computed } from 'perlite';
 
 const STORAGE_KEY = 'todos-todomvc';
 

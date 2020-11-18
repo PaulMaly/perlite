@@ -1,4 +1,4 @@
-import { html, nothing, cache } from 'https://unpkg.com/perlite@latest/dist/perlite.min.mjs';
+import { html, nothing, cache } from 'perlite';
 
 import { addTodo, removeTodo, clearCompleted } from '../../stores/todos.js';
 

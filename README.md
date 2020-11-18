@@ -13,63 +13,65 @@
 
 - [Description & Features](https://github.com/PaulMaly/perlite#-description--features).
 - [Installation](https://github.com/PaulMaly/perlite#-installation)
-    - [NPM](https://github.com/PaulMaly/perlite#npm)
-    - [CDN](https://github.com/PaulMaly/perlite#cdn)
-    - [Distribution](https://github.com/PaulMaly/perlite#distribution)
+  - [NPM](https://github.com/PaulMaly/perlite#npm)
+  - [CDN](https://github.com/PaulMaly/perlite#cdn)
+  - [Distribution](https://github.com/PaulMaly/perlite#distribution)
 - [Examples](https://github.com/PaulMaly/perlite#-examples)
+  - [TodoMVC](https://github.com/PaulMaly/perlite#todomvc)
+  - [Simple Shop](https://github.com/PaulMaly/perlite#simple-shop)
 - [Basic usage](https://github.com/PaulMaly/perlite#-basic-usage)
-    - [Widget declaration](https://github.com/PaulMaly/perlite#widget-declaration)
-    - [Widget creation](https://github.com/PaulMaly/perlite#widget-creation)
-    - [Widget multiple instantiation](https://github.com/PaulMaly/perlite#widget-multiple-instantiation)
-    - [Widget container](https://github.com/PaulMaly/perlite#widget-container)
-    - [Widget state](https://github.com/PaulMaly/perlite#widget-state)
-        - [Reactivity](https://github.com/PaulMaly/perlite#reactivity)
-        - [Actions](https://github.com/PaulMaly/perlite#actions)
-    - [Widget template](https://github.com/PaulMaly/perlite#widget-template)
-        - [Template syntax](https://github.com/PaulMaly/perlite#template-syntax)
-        - [Text bindings](https://github.com/PaulMaly/perlite#text-bindings)
-        - [Using expressions](https://github.com/PaulMaly/perlite#using-expressions)
-        - [Attribute bindings](https://github.com/PaulMaly/perlite#attribute-bindings)
-        - [Event listeners](https://github.com/PaulMaly/perlite#event-listeners)
-        - [Template fragments](https://github.com/PaulMaly/perlite#template-fragments)
-        - [Control flow](https://github.com/PaulMaly/perlite#control-flow)
-            - [Conditions](https://github.com/PaulMaly/perlite#conditions)
-            - [Looping](https://github.com/PaulMaly/perlite#looping)        
-        - [Rendering](https://github.com/PaulMaly/perlite#rendering)
-    - [Widget lifecycle events](https://github.com/PaulMaly/perlite#widget-lifecycle-events)
-    - [Widget API](https://github.com/PaulMaly/perlite#widget-api)
-        - [$widget.target: HTMLElement | Node;](https://github.com/PaulMaly/perlite#widgettarget-htmlelement--node)
-        - [$widget.state: ProxyConstructor;](https://github.com/PaulMaly/perlite#widgetstate-proxyconstructor)
-        - [$widget.model: object;](https://github.com/PaulMaly/perlite#widgetmodel-object)
-        - [$widget.effect(fn: () => void, opts?: object): () => void;](https://github.com/PaulMaly/perlite#widgeteffectfn---void-opts-object---void)
-        - [$widget.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): () => void;](https://github.com/PaulMaly/perlite#widgetontype-string-fn-e-customevent--void-opts-object--boolean---void)
-        - [$widget.render(): void;](https://github.com/PaulMaly/perlite#widgetrender-void)
-        - [$widget.destroy(): void;](https://github.com/PaulMaly/perlite#widgetdestroy-void)
-        - [$widget.ctx(fn: (...ctx: any[]) => any): any;](https://github.com/PaulMaly/perlite#widgetctxfn-ctx-any--any-any)
-    - [Widget container API](https://github.com/PaulMaly/perlite#widget-container-api)
-        - [$$widgets[index: number]: Widget;](https://github.com/PaulMaly/perlite#widgetsindex-number-widget)
-        - [$$widgets.target: NodeList | Node[];](https://github.com/PaulMaly/perlite#widgetstarget-nodelist--node)
-        - [$$widgets.state(fn: (state: ProxyConstructor) => void): void;](https://github.com/PaulMaly/perlite#widgetsstatefn-state-proxyconstructor--void-void)
-        - [$$widgets.effect(fn: (state: ProxyConstructor) => () => void, opts?: object): (() => void)[];](https://github.com/PaulMaly/perlite#widgetseffectfn-state-proxyconstructor----void-opts-object---void)
-        - [$$widgets.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): (() => void)[];](https://github.com/PaulMaly/perlite#widgetsontype-string-fn-e-customevent--void-opts-object--boolean---void)
-        - [$$widgets.render(): void;](https://github.com/PaulMaly/perlite#widgetsrender-void)
-        - [$$widgets.destroy(): void;](https://github.com/PaulMaly/perlite#widgetsdestroy-void)
-        - [$$widgets.ctx(fn: (...ctx: any[]) => any): any;](https://github.com/PaulMaly/perlite#widgetsctxfn-ctx-any--any-any)
-        - [$$widgets.forEach(fn: (widget: Widget, index: number, widgets: Widget[]) => void): any;](https://github.com/PaulMaly/perlite#widgetsforeachfn-widget-widget-index-number-widgets-widget--void-void)
+  - [Widget declaration](https://github.com/PaulMaly/perlite#widget-declaration)
+  - [Widget creation](https://github.com/PaulMaly/perlite#widget-creation)
+  - [Widget multiple instantiation](https://github.com/PaulMaly/perlite#widget-multiple-instantiation)
+  - [Widget container](https://github.com/PaulMaly/perlite#widget-container)
+  - [Widget state](https://github.com/PaulMaly/perlite#widget-state)
+    - [Reactivity](https://github.com/PaulMaly/perlite#reactivity)
+    - [Actions](https://github.com/PaulMaly/perlite#actions)
+  - [Widget template](https://github.com/PaulMaly/perlite#widget-template)
+    - [Template syntax](https://github.com/PaulMaly/perlite#template-syntax)
+    - [Text bindings](https://github.com/PaulMaly/perlite#text-bindings)
+    - [Using expressions](https://github.com/PaulMaly/perlite#using-expressions)
+    - [Attribute bindings](https://github.com/PaulMaly/perlite#attribute-bindings)
+    - [Event listeners](https://github.com/PaulMaly/perlite#event-listeners)
+    - [Template fragments](https://github.com/PaulMaly/perlite#template-fragments)
+    - [Control flow](https://github.com/PaulMaly/perlite#control-flow)
+      - [Conditions](https://github.com/PaulMaly/perlite#conditions)
+      - [Looping](https://github.com/PaulMaly/perlite#looping)
+    - [Rendering](https://github.com/PaulMaly/perlite#rendering)
+  - [Widget lifecycle events](https://github.com/PaulMaly/perlite#widget-lifecycle-events)
+  - [Widget API](https://github.com/PaulMaly/perlite#widget-api)
+    - [$widget.target: HTMLElement | Node;](https://github.com/PaulMaly/perlite#widgettarget-htmlelement--node)
+    - [$widget.state: ProxyConstructor;](https://github.com/PaulMaly/perlite#widgetstate-proxyconstructor)
+    - [$widget.model: object;](https://github.com/PaulMaly/perlite#widgetmodel-object)
+    - [$widget.effect(fn: () => void, opts?: object): () => void;](https://github.com/PaulMaly/perlite#widgeteffectfn---void-opts-object---void)
+    - [$widget.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): () => void;](https://github.com/PaulMaly/perlite#widgetontype-string-fn-e-customevent--void-opts-object--boolean---void)
+    - [$widget.render(): void;](https://github.com/PaulMaly/perlite#widgetrender-void)
+    - [$widget.destroy(): void;](https://github.com/PaulMaly/perlite#widgetdestroy-void)
+    - [$widget.ctx(fn: (...ctx: any[]) => any): any;](https://github.com/PaulMaly/perlite#widgetctxfn-ctx-any--any-any)
+  - [Widget container API](https://github.com/PaulMaly/perlite#widget-container-api)
+    - [$$widgets[index: number]: Widget;](https://github.com/PaulMaly/perlite#widgetsindex-number-widget)
+    - [$$widgets.target: NodeList | Node[];](https://github.com/PaulMaly/perlite#widgetstarget-nodelist--node)
+    - [$$widgets.state(fn: (state: ProxyConstructor) => void): void;](https://github.com/PaulMaly/perlite#widgetsstatefn-state-proxyconstructor--void-void)
+    - [$$widgets.effect(fn: (state: ProxyConstructor) => () => void, opts?: object): (() => void)[];](https://github.com/PaulMaly/perlite#widgetseffectfn-state-proxyconstructor----void-opts-object---void)
+    - [$$widgets.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): (() => void)[];](https://github.com/PaulMaly/perlite#widgetsontype-string-fn-e-customevent--void-opts-object--boolean---void)
+    - [$$widgets.render(): void;](https://github.com/PaulMaly/perlite#widgetsrender-void)
+    - [$$widgets.destroy(): void;](https://github.com/PaulMaly/perlite#widgetsdestroy-void)
+    - [$$widgets.ctx(fn: (...ctx: any[]) => any): any;](https://github.com/PaulMaly/perlite#widgetsctxfn-ctx-any--any-any)
+    - [$$widgets.forEach(fn: (widget: Widget, index: number, widgets: Widget[]) => void): any;](https://github.com/PaulMaly/perlite#widgetsforeachfn-widget-widget-index-number-widgets-widget--void-void)
 - [Advanced usage](https://github.com/PaulMaly/perlite#-advanced-usage)
-    - [Setting the initial widget state during SSR](https://github.com/PaulMaly/perlite#setting-the-initial-widget-state-during-ssr)
-    - [Directives](https://github.com/PaulMaly/perlite#directives)
-        - [Lit-html directives](https://github.com/PaulMaly/perlite#lit-html-directives)
-        - [Lists & keys](https://github.com/PaulMaly/perlite#lists--keys)
-        - [Event listener modifiers](https://github.com/PaulMaly/perlite#event-listener-modifiers)
-        - [Refs & decorators](https://github.com/PaulMaly/perlite#refs--decorators)
-    - [Custom directive](https://github.com/PaulMaly/perlite#custom-directives)
-    - [Widget context](https://github.com/PaulMaly/perlite#widget-context)
-    - [Widget nesting](https://github.com/PaulMaly/perlite#widget-nesting)
-    - [Shared state](https://github.com/PaulMaly/perlite#shared-state)
-    - [Styling](https://github.com/PaulMaly/perlite#styling)
-    - [Transitions](https://github.com/PaulMaly/perlite#transitions)
-    - [Utilities](https://github.com/PaulMaly/perlite#utilities)
+  - [Setting the initial widget state during SSR](https://github.com/PaulMaly/perlite#setting-the-initial-widget-state-during-ssr)
+  - [Directives](https://github.com/PaulMaly/perlite#directives)
+    - [Lit-html directives](https://github.com/PaulMaly/perlite#lit-html-directives)
+    - [Lists & keys](https://github.com/PaulMaly/perlite#lists--keys)
+    - [Event listener modifiers](https://github.com/PaulMaly/perlite#event-listener-modifiers)
+    - [Refs & decorators](https://github.com/PaulMaly/perlite#refs--decorators)
+  - [Custom directive](https://github.com/PaulMaly/perlite#custom-directives)
+  - [Widget context](https://github.com/PaulMaly/perlite#widget-context)
+  - [Widget nesting](https://github.com/PaulMaly/perlite#widget-nesting)
+  - [Shared state](https://github.com/PaulMaly/perlite#shared-state)
+  - [Styling](https://github.com/PaulMaly/perlite#styling)
+  - [Transitions](https://github.com/PaulMaly/perlite#transitions)
+  - [Utilities](https://github.com/PaulMaly/perlite#utilities)
 - [Typescript support](https://github.com/PaulMaly/perlite#-typescript-support)
 - [Browsers support](https://github.com/PaulMaly/perlite#-browsers-support)
 - [License](https://github.com/PaulMaly/perlite#-license)
@@ -82,7 +84,7 @@ Unlike the other frontend frameworks, eg. *React*, *Vue*, *Angular* or *Svelte*,
 
 **Perlite** focuses on building **standalone** UI widgets placed across different parts of the server-generated page and provides handy tools to manage these widgets and interact between them.
 
-Built on top [**lit-html**](https://lit-html.polymer-project.org/) - an efficient, expressive, extensible HTML templating library and [**hyperactiv**](https://github.com/elbywan/hyperactiv) - a super tiny reactive library. This means that your widgets will have a reactive state with direct object mutations, super-fast DOM updates, and low memory consumption. 
+Built on top [**lit-html**](https://lit-html.polymer-project.org/) - an efficient, expressive, extensible HTML templating library and [**hyperactiv**](https://github.com/elbywan/hyperactiv) - a super tiny reactive library. This means that your widgets will have a reactive state with direct object mutations, super-fast DOM updates, and low memory consumption.
 
 The full bundle size of **Perlite** library is just **8.8Kb (min+gz)**. In addition, it's optimized for tree-shaking, so you can reduce the final size if not all features are used. At the same time, **Perlite** is full-featured enough to fulfill its purposes and no additional tools you needed in most of the cases.
 
@@ -145,11 +147,20 @@ CDNs: [UNPKG](https://unpkg.com/perlite/) | [jsDelivr](https://cdn.jsdelivr.net/
 
 ### TodoMVC
 
-[Simple server-rendered shop catalog page with multiple client-side widgets](https://github.com/PaulMaly/perlite/tree/main/examples/todomvc)
+[TodoMVC](https://github.com/PaulMaly/perlite/tree/main/examples/todomvc)
+
+- single widget app;
+- multiple fragments;
+- store with actions for todos list with side-effect to the `sessionStorage`;
+- based on [ES dev server](https://www.npmjs.com/package/es-dev-server) and NPM.
 
 ### Simple Shop
 
-[Basic TodoMVC app with single widget, multiple fragments and store with actions](https://github.com/PaulMaly/perlite/tree/main/examples/shop)
+[Simple shop](https://github.com/PaulMaly/perlite/tree/main/examples/shop)
+
+- server-generated page (actually a static file);
+- multiple client-side widgets and basic interactions between them;
+- based on static web server and CDN.
 
 ## 🔨 Basic usage
 
@@ -193,19 +204,19 @@ export const $helloWorld = $({
 });
 ```
 
-The constructor function will return an object which allows you to manage a widget. To distinguish widgets from regular JS objects, it's recommended to follow the naming convention by prefixing widget names with the “$” sign. 
+The constructor function will return an object which allows you to manage a widget. To distinguish widgets from regular JS objects, it's recommended to follow the naming convention by prefixing widget names with the “$” sign.
 
 Actually, a widget object is just a namespace without any overall context. So, you can use ES6 [Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) and use things separately:
 
 ```javascript
-const { 
+const {
     destroy,
     render,
     target,
-    state, 
+    state,
     effect,
     ctx,
-    on, 
+    on,
 } = $helloWorld;
 ```
 
@@ -408,11 +419,11 @@ in template
 
 ```javascript
 html`
-  ${state.user ? 
+  ${state.user ?
     html`
         <h1>Welcome ${state.user.name}</h1>
         <a href="/logout">Logout</a>
-    ` : 
+    ` :
     html`
         <a href="/login">Login</a>
     `
@@ -489,7 +500,7 @@ These events are pre-defined and emitted on `target` node as the other widget cu
 + `destroy` - fires once when the component is removed from the DOM;
 + `error` - fires on exception occur during the rendering cycle;
 
-Each life-cycle event, except `error`, receives a [`model`]() of the widget in `event.detail`. This state is not reactive and its changes won't trigger widget re-rendering. If you *really* need to start new DOM update cycle from a life-cycle event handler (basically, you shouldn't do that), you can use reactive [`state`]() or manual call [`render()`]() function via widget object. 
+Each life-cycle event, except `error`, receives a [`model`]() of the widget in `event.detail`. This state is not reactive and its changes won't trigger widget re-rendering. If you *really* need to start new DOM update cycle from a life-cycle event handler (basically, you shouldn't do that), you can use reactive [`state`]() or manual call [`render()`]() function via widget object.
 
 In difference with the other life-cycle events, `error` event receives an exception in `event.detail`.
 
@@ -509,11 +520,11 @@ $widget.on('error', e => {
 
 ### Widget API
 
-#### $widget.target: HTMLElement | Node;
+#### $widget.target: HTMLElement | Node
 
 Just a reference to target node of a widget.
 
-#### $widget.state: ProxyConstructor;
+#### $widget.state: ProxyConstructor
 
 Reactive state of a widget based on initial state object (called model). Changing this state will perform a re-render and DOM updates.
 
@@ -523,11 +534,11 @@ $widget.state.bar = true;
 $widget.state.baz = 'horse'; // updates will be bunched
 ```
 
-#### $widget.model: object;
+#### $widget.model: object
 
 It's just a reference to plain state object, which is a model for reactive state (proxy target). You can changing this model, but because it's not reactive, re-rendering won't be performed. To apply these changes to the DOM you can use [`render()`]() function.
 
-#### $widget.effect(fn: () => void, opts?: object): () => void;
+#### $widget.effect(fn: () => void, opts?: object): () => void
 
 The effect is a function which executed each time its dependencies changed. Dependencies are tracked automatically and don't need to be explicitly specified.
 
@@ -542,7 +553,7 @@ cancel();
 
 `effect()` function is just a wrapper ontop of [hyperactiv's `computed()`](https://github.com/elbywan/hyperactiv#2-define-computed-functions) with automatic dispose on widget destroy. So, you can use all things described in [hyperactiv guide](https://github.com/elbywan/hyperactiv). This function return `cancel()` function, so you can dispose of an effect when you actually don't need it.
 
-#### $widget.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): () => void;
+#### $widget.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): () => void
 
 This function lets you add an event listener to the widget to catch custom events dispatched by `emit()` function and automatically removes the handler on widget destroy. Also, you can remove the handler manually using `off()` function:
 
@@ -555,17 +566,17 @@ const off = $widget.on('my-custom-event', (event) => {
 off();
 ```
 
-#### $widget.render(): void;
+#### $widget.render(): void
 
-Call this function to manually re-render a widget. Usually, it's not necessary, because you need just use a state-driven approach and change the reactive state to automatically perform a re-render. But sometimes you may want to force the DOM update. This function is idempotent and safe to re-call. If actual state wasn't changed, no changes in DOM will performed. 
+Call this function to manually re-render a widget. Usually, it's not necessary, because you need just use a state-driven approach and change the reactive state to automatically perform a re-render. But sometimes you may want to force the DOM update. This function is idempotent and safe to re-call. If actual state wasn't changed, no changes in DOM will performed.
 
-#### $widget.destroy(): void;
+#### $widget.destroy(): void
 
 Completelly destroy a widget, removes all event listeners and effects, and clean up the markup. It also fires a [`destroy`](https://github.com/PaulMaly/perlite#widget-lifecycle-events) life-cycle event.
 
 Calling this function is the most proper way to destroy the widget, but if, for some reason, the `target` node will be removed from the DOM by external code, it will be tracked on the next render cycle, and destroy operations will be performed automatically.
 
-#### $widget.ctx(fn: (...ctx: any[]) => any): any;
+#### $widget.ctx(fn: (...ctx: any[]) => any): any
 
 This function receives callback function to get context values passed to the widget during creation.
 
@@ -589,35 +600,35 @@ More details about [context](https://github.com/PaulMaly/perlite#widget-context)
 
 WIP
 
-#### $$widgets[index: number]: Widget;
+#### $$widgets[index: number]: Widget
 
 Gets any widget by index in the order of `target` list provided on the creation of the container.
 
-#### $$widgets.target: NodeList | Node[];
+#### $$widgets.target: NodeList | Node[]
 
 The original list of `targets` of the container widgets.
 
-#### $$widgets.state(fn: (state: ProxyConstructor) => void): void;
+#### $$widgets.state(fn: (state: ProxyConstructor) => void): void
 
-#### $$widgets.effect(fn: (state: ProxyConstructor) => () => void, opts?: object): (() => void)[];
+#### $$widgets.effect(fn: (state: ProxyConstructor) => () => void, opts?: object): (() => void)[]
 
-#### $$widgets.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): (() => void)[];
+#### $$widgets.on(type: string, fn: (e: CustomEvent) => void, opts?: object | boolean): (() => void)[]
 
 Works almost the same as [`on()`]() function of a single widget but add events listener to every widget inside the container.
 
-#### $$widgets.render(): void;
+#### $$widgets.render(): void
 
 Works almost the same as [`render()`]() function of a single widget but apply re-render to every widget inside the container.
 
-#### $$widgets.destroy(): void;
+#### $$widgets.destroy(): void
 
 Works almost the same as [`render()`]() function of a single widget but destroy all widgets inside the container.
 
-#### $$widgets.ctx(fn: (...ctx: any[]) => any): any;
+#### $$widgets.ctx(fn: (...ctx: any[]) => any): any
 
 Equal to [`ctx()`]() function of a single widget. All widgets inside the container share the same context values.
 
-#### $$widgets.forEach(fn: (widget: Widget, index: number, widgets: Widget[]) => void): void;
+#### $$widgets.forEach(fn: (widget: Widget, index: number, widgets: Widget[]) => void): void
 
 Use it for looping through all the widgets inside the container:
 
@@ -634,12 +645,12 @@ $$widgets.forEach($widget => {
 Most often, you will need some initial widget state to be set by the server during page rendering. Just use `data-attributes` on widget `target` element and render necessary values there. For example, using **PHP** templating:
 
 ```php
-<div 
+<div
     id="myWidget"
-    data-string="<?=$strVal?>" 
-    data-number="<?=$numVal?>" 
-    data-boolean="<?=$boolVal?>" 
-    data-null="<?=$nullVal?>" 
+    data-string="<?=$strVal?>"
+    data-number="<?=$numVal?>"
+    data-boolean="<?=$boolVal?>"
+    data-null="<?=$nullVal?>"
     data-json="<?=$jsonVal?>"
 ></div>
 ```
@@ -688,7 +699,7 @@ WIP
 #### Event listener modifiers
 
 ```javascript
-import { 
+import {
     capture,
     passive,  
     once,
@@ -743,8 +754,8 @@ const context = { ... };
 const $widget = $({
         target,
         render,
-        state, 
-    }, 
+        state,
+    },
     context
 );
 ```
@@ -756,9 +767,9 @@ const context2 = true;
 const $widget = $({
         target,
         render,
-        state, 
-    }, 
-    context1, 
+        state,
+    },
+    context1,
     context2,
     ...
 );
@@ -776,7 +787,7 @@ export function render(state, emit, context1, context2) {
     const something = Object.entries(context1).reduce(() => { ... });
 
     return html`
-        <div>Context2: ${context2}</div> 
+        <div>Context2: ${context2}</div>
     `;
 }
 ```
@@ -845,7 +856,7 @@ export function render(state, emit, { $nested1, $nested2 }) {
 
 ### Shared state
 
-Also known as `store(s)` - a very simple `observables`. Whenever a property of an observed object is changed, every function that depends on this property is called. 
+Also known as `store(s)` - a very simple `observables`. Whenever a property of an observed object is changed, every function that depends on this property is called.
 
 First of all, need to create a new `observable` store:
 
@@ -901,7 +912,7 @@ WIP
 
 ### Utilities
 
-#### tick(fn?: () => any): Promise<undefined>;
+#### tick(fn?: () => any): Promise<undefined>
 
 Defer the code to be executed after the next DOM update cycle. Use it immediately after you’ve changed some data to wait for the DOM update:
 
@@ -926,8 +937,8 @@ export function render(state, emit) {
     // before the current one is completed
     state.result = ...;
 
-    // RIGHT WAY - defer state change to the next DOM update cycle 
-    tick(() => { 
+    // RIGHT WAY - defer state change to the next DOM update cycle
+    tick(() => {
         state.result = ...;
     });
 
@@ -935,9 +946,9 @@ export function render(state, emit) {
 }
 ```
 
-#### memo(fn: (...args: any[]) => any, invalidate?: (...args: any[]) => any): (...args: any[]) => any;
+#### memo(fn: (...args: any[]) => any, invalidate?: (...args: any[]) => any): (...args: any[]) => any
 
-Creates and returns a new memoized version of the passed function that will cache the result based on its arguments. 
+Creates and returns a new memoized version of the passed function that will cache the result based on its arguments.
 
 ```javascript
 import { memo } from 'perlite';
@@ -974,7 +985,7 @@ const funcMemoized = memo(heavyFunc, (foo, bar, baz) => {
 });
 ```
 
-#### attrToVal(str: string): any;
+#### attrToVal(str: string): any
 
 ```javascript
 import { attrToVal } from 'perlite';
@@ -986,7 +997,7 @@ attrToVal('2'); // 2
 attrToVal('{"foo":1}'); // { foo: 1 }
 ```
 
-#### camelCase(str: string, pascal: boolean = false): string;
+#### camelCase(str: string, pascal: boolean = false): string
 
 ```javascript
 import { camelCase } from 'perlite';
@@ -995,7 +1006,7 @@ camelCase('kebab-to-camel-case'); // kebabToCamelCase
 camelCase('kebab-to-pascal-case', true); // KebabToPascalCase
 ```
 
-#### kebabCase(str: string): string;
+#### kebabCase(str: string): string
 
 ```javascript
 import { kebabCase } from 'perlite';

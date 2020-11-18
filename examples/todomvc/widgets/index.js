@@ -1,4 +1,4 @@
-import { $ } from 'https://unpkg.com/perlite@latest/dist/perlite.min.mjs';
+import { $ } from 'perlite';
 
 import * as TodoList from './TodoList/index.js';
 
