@@ -1,4 +1,4 @@
-import { html, nothing, cache } from 'perlite';
+import { html, nothing, cache, prevent } from 'perlite';
 
 import { addTodo, removeTodo, clearCompleted } from '../../stores/todos.js';
 
@@ -70,7 +70,7 @@ export function filters(state, { numActive, numCompleted }) {
           FILTERS.map(
             (filter) => html`
             <li>
-                <a @click=${()=> (state.currentFilter = filter)}
+                <a @click=${prevent(()=> (state.currentFilter = filter))}
                     class="${state.currentFilter === filter ? 'selected' : ''}"
                     href="#/"
                     >${filter}</a>

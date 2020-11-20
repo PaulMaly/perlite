@@ -72,11 +72,13 @@
   - [Styling](https://github.com/PaulMaly/perlite#styling)
   - [Transitions](https://github.com/PaulMaly/perlite#transitions)
   - [Utilities](https://github.com/PaulMaly/perlite#utilities)
+- [Structuring your project](https://github.com/PaulMaly/perlite#-structuring-your-project)
+- [Tooling](https://github.com/PaulMaly/perlite#-tooling)
 - [Typescript support](https://github.com/PaulMaly/perlite#-typescript-support)
 - [Browsers support](https://github.com/PaulMaly/perlite#-browsers-support)
 - [License](https://github.com/PaulMaly/perlite#-license)
 
-## 📋 Description & Features
+## 💡 Description & Features
 
 Unlike the other frontend frameworks, eg. *React*, *Vue*, *Angular* or *Svelte*, which are mostly created for building SPA/RIA applications, **Perlite**'s main goal is to make the life of developers of classical server-side applications a little bit easier and the modern front-end development techniques more accessible. Without extra knowledge of building tools and other dark sides of the frontend ecosystem . 👾
 
@@ -676,19 +678,19 @@ WIP
 
 **Perlite** re-exports all **lit-html** built-in directives:
 
-+ repeat
-+ cache
-+ until
-+ live
-+ guard
-+ class-map
-+ style-map
-+ if-defined
-+ async-append
-+ async-replace
-+ template-content
-+ unsafe-html
-+ unsafe-svg
+- repeat
+- cache
+- until
+- live
+- guard
+- class-map
+- style-map
+- if-defined
+- async-append
+- async-replace
+- template-content
+- unsafe-html
+- unsafe-svg
 
 Follow the **lit-html** [guide](https://lit-html.polymer-project.org/guide/template-reference#built-in-directives) to lean how to use them.
 
@@ -746,7 +748,7 @@ Directives are fully provided by *lit-html* without any specifics or limitations
 
 ### Widget context
 
-The main thing you should know, context values are static. They are passed through when the widget is created, their count and order can't be changed all the widget life-cycle. Of course, if the context value is a reference to the object/array, its changes could be applied in the next rendering cycle. But these changes never triggering a new render by itself.
+Basically, `context` is just any additional arguments that can be passed to the widget's `state` and `render` functions on widget creation. These arguments can have any type and order you needed. The main thing you should know, `context` values are static. They are passed through when the widget is created, their count and order can't be changed on all widget life-cycle. Of course, if some `context` value is a reference to the object/array, its mutations could be applied in the next DOM update cycle. But, unlike the `state` mutations, context mutations will never trigger a new DOM update cycle by itself.
 
 ```javascript
 const context = { ... };
@@ -1014,10 +1016,98 @@ import { kebabCase } from 'perlite';
 kebabCase('camelToKebabCase'); // camel-to-kebab-case
 ```
 
+## 📂 Structuring your project
+
+Basically, **Perlite** is not really opinionated about how you should structure your projects. But to not leave you alone with this question, let's describe a possible project structure you may use.
+
+So, the main project unit is a widget, and the main part of the widget is its [declaration](https://github.com/PaulMaly/perlite#widget-declaration). That's why we suppose to create a `widgets` folder to contain declarations of the project widgets. Any widget declaration can be a single file or subfolder for more complex widgets.
+
+```sh
+./widgets/
+  ./Widget1.js
+  ./Widget2/
+    ./styles.css
+    ./index.js
+```
+
+Any widget can have [fragments](https://github.com/PaulMaly/perlite#template-fragments) that are just re-usable pieces of the templates. You can keep fragments in the widget file if their number and size are not so big. Otherwise, you can take them out to a separate file or even a folder.
+
+```sh
+./widgets/
+  ./Widget1/
+    ./fragments.js
+    ./index.js
+  ./Widget2/
+    ./fragments/
+      ./fragment1.js
+    ./index.js
+```
+
+Next thing that we have a [widget creation](https://github.com/PaulMaly/perlite#widget-creation) process. In most cases, you'll need to create widgets right after DOM is ready and be able to get a widget object in any place of your code.
+
+We suppose to add an `index.js` file in the `widgets` folder and create the widgets there. To get access to created objects you can just export it from this file. ES modules approach based on *single instance pattern*, so you'll be able to import widget objects in other files.
+
+```sh
+./widgets/
+  ./Widget1/
+  ./Widget2/
+  ./index.js
+```
+
+Your `index.js` can look like this:
+
+```javascript
+import { $, $$ } from 'perlite';
+
+// importing widget declarations
+
+import * as Widget1 from './Widget1.js';
+import * as Widget2 from './Widget2.js';
+
+// creating and exporting the widgets or widget containers
+
+export const $widget1 = $({
+    target: document.getElementById('widget1Container'),
+    ...Widget1
+});
+
+export const $$widget2 = $$({
+    target: document.querySelectorAll('.widget2Container'),
+    ...Widget2
+});
+```
+
+After that, you'll be able to import any widget in any file of your project.
+
+```javascript
+import { $widget1 } from './widgets/';
+
+$widget1.effect(() => {
+    // do something
+});
+```
+
+Regarding the [stores](https://github.com/PaulMaly/perlite#shared-state), you may use almost the same approach - create a `stores` folder with subfolders if needed, and hold stores in different files, optionally, re-exports them from a single entry point (`index.js`).
+
+```sh
+./stores/
+  ./store1/
+    ./store1-1.js
+    ./store1-2.js
+    ./index.js
+  ./store2.js
+  ./index.js
+```
+
+## 🧰 Tooling
+
+- [VS Code plugin](https://marketplace.visualstudio.com/items?itemName=runem.lit-plugin)
+- [ESLint plugin](https://github.com/43081j/eslint-plugin-lit)
+
 ## ⌨️ Typescript support
 
 ## 🌐 Browsers support
 
 ## 📜 License
 
-This software is licensed under the MIT © PaulMaly.
+This software is licensed under the MIT © Pavel Malyshev.

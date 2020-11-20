@@ -85,7 +85,7 @@ export default [{ // esm && umd bundles for npm/yarn
         typescript({ sourceMap: true, }),
         terser(terserConfig),
     ],
-}, { // esm bundle from cdn/unpkg
+}, { // esm bundle for cdn/unpkg
     input,
     output: files.cdn.esm,
     plugins: [
@@ -93,7 +93,7 @@ export default [{ // esm && umd bundles for npm/yarn
         commonjs({ include: 'node_modules/**', extensions, }),
         typescript(),
     ],
-}, { // iife bundle from cdn/unpkg
+}, { // iife bundle for cdn/unpkg
     input,
     output: files.cdn.iife,
     plugins: [
@@ -113,7 +113,7 @@ export default [{ // esm && umd bundles for npm/yarn
         typescript({ sourceMap: true, }),
         terser(terserConfig),
     ],
-}, { // iife bundle from cdn/unpkg (min)
+}, { // iife bundle for cdn/unpkg (min)
     input,
     output: files.cdn.iifeMin,
     plugins: [
