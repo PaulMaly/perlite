@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-flow: column wrap;
+  align-content: space-between;
+  height: 580px;
+}
+
+.widget {
+  width: 32%;
+  margin-bottom: 2%; /* (100-32*3)/2 */
+}
+
+/* Re-order items into rows */
+.widget:nth-child(3n+1) { order: 1; }
+.widget:nth-child(3n+2) { order: 2; }
+.widget:nth-child(3n)   { order: 3; }
+
+/* Force new columns */
+.container::before,
+.container::after {
+  content: "";
+  flex-basis: 100%;
+  width: 0;
+  order: 2;
+}

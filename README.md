@@ -19,6 +19,7 @@
 - [Examples](https://github.com/PaulMaly/perlite#-examples)
   - [TodoMVC](https://github.com/PaulMaly/perlite#todomvc)
   - [Simple Shop](https://github.com/PaulMaly/perlite#simple-shop)
+  - [7GUIs](https://github.com/PaulMaly/perlite#7guis)
 - [Basic usage](https://github.com/PaulMaly/perlite#-basic-usage)
   - [Widget declaration](https://github.com/PaulMaly/perlite#widget-declaration)
   - [Widget creation](https://github.com/PaulMaly/perlite#widget-creation)
@@ -163,6 +164,14 @@ CDNs: [UNPKG](https://unpkg.com/perlite/) | [jsDelivr](https://cdn.jsdelivr.net/
 - server-generated page (actually a static file);
 - multiple client-side widgets and basic interactions between them;
 - based on static web server and CDN.
+
+### 7GUIs
+
+[7GUIs](https://github.com/PaulMaly/perlite/tree/main/examples/7guis)
+
+- 7 standalone widgets with different ways to made UI stuff;
+- implementation of [The 7 GUIs tasks](https://eugenkiss.github.io/7guis/tasks); 
+- based on [ES dev server](https://www.npmjs.com/package/es-dev-server) and NPM.
 
 ## 🔨 Basic usage
 
