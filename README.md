@@ -878,14 +878,16 @@ As it's often in *Angular*, use observables named with a trailing “$” sign t
 import { computed, dispose } from 'perlite';
 import { store$ } from './store.js';
 
-const userSubscription = computed(() => {
+const user$$ = computed(() => {
     console.log('User data has changed', store$.user);
 });
 ...
-dispose(userSubscription);
+dispose(user$$);
 ```
 
-Use `computed` function to subscribe to the store properties changes and perform any operations or side-effects. Dependencies are automatically tracked so you don't need to explicitly declare anything - just use the properties you need. Don't forget to dispose of a subscription if you no longer need it. Read more about these things in [hyperactiv guide](https://github.com/elbywan/hyperactiv#usage).
+To subscribe to the store properties, pass the callback function as a first argument of `computed` function and just perform any operations or side-effects with needful properties. It also returns `subscription` handler to dispose of a subscription if you no longer need it. It recommended to name `subscriptions` with a trailing "$$" sign (double "$") for short and distinguish it from the other objects.
+
+Dependencies are automatically tracked so you don't need to explicitly declare anything - just use the properties you need. Read more about these things in [hyperactiv guide](https://github.com/elbywan/hyperactiv#usage).
 
 Just import the store to use it in a widget:
 
@@ -1097,6 +1099,21 @@ Regarding the [stores](https://github.com/PaulMaly/perlite#shared-state), you ma
     ./index.js
   ./store2.js
   ./index.js
+```
+
+```javascript
+import { html, bind, computed } from 'perlite';
+import { user$ } from './stores/';
+
+export const userName$$ = computed(() => {
+    console.log('user name is ', user$.name);
+});
+
+export function fragment() {
+    return html`
+        <input value=${user$.name} @change=${bind(name => user$.name = name)}>
+    `;
+}
 ```
 
 ## 🧰 Tooling
