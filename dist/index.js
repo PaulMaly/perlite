@@ -8,6 +8,7 @@
 
     var hr__default = /*#__PURE__*/_interopDefaultLegacy(hr);
 
+    const unrender = (target) => litHtml.render(litHtml.nothing, target);
     const noop = (...args) => { };
     const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
     const memo = (fn, invalidate) => {
@@ -291,14 +292,14 @@
             subtree: false
         });
         const destroy = (cb = noop) => {
-            emit('destroy', model);
             observer.disconnect();
             dispose(renderer);
             effects.forEach((cancel) => cancel());
             effects.clear();
+            emit('destroy', model);
             events.forEach((off) => off());
             events.clear();
-            target.innerHTML = '';
+            unrender(target);
             cb(model);
         };
         const ctx = (fn) => fn(...context);
@@ -475,6 +476,7 @@
     exports.self = self;
     exports.stop = stop;
     exports.tick = tick;
+    exports.unrender = unrender;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

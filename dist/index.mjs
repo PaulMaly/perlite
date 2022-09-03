@@ -1,5 +1,5 @@
 import hr from 'hyperactiv';
-import { directive, EventPart, nothing, render } from 'lit-html';
+import { render, nothing, directive, EventPart } from 'lit-html';
 export * from 'lit-html';
 import { repeat as repeat$1 } from 'lit-html/directives/repeat';
 export * from 'lit-html/directives/repeat';
@@ -16,6 +16,7 @@ export * from 'lit-html/directives/template-content';
 export * from 'lit-html/directives/unsafe-html';
 export * from 'lit-html/directives/unsafe-svg';
 
+const unrender = (target) => render(nothing, target);
 const noop = (...args) => { };
 const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
 const memo = (fn, invalidate) => {
@@ -299,14 +300,14 @@ const $ = ({ render: template = () => nothing, state: data = {}, target = docume
         subtree: false
     });
     const destroy = (cb = noop) => {
-        emit('destroy', model);
         observer.disconnect();
         dispose(renderer);
         effects.forEach((cancel) => cancel());
         effects.clear();
+        emit('destroy', model);
         events.forEach((off) => off());
         events.clear();
-        target.innerHTML = '';
+        unrender(target);
         cb(model);
     };
     const ctx = (fn) => fn(...context);
@@ -349,4 +350,4 @@ const $$ = ({ target, ...config }, ...context) => {
     };
 };
 
-export { $, $$, attrToVal, bind, call, camelCase, capture, computed, decorator, dispose, each, kebabCase, memo, noop, observe, once, passive, prevent, ref, self, stop, tick };
+export { $, $$, attrToVal, bind, call, camelCase, capture, computed, decorator, dispose, each, kebabCase, memo, noop, observe, once, passive, prevent, ref, self, stop, tick, unrender };

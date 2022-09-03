@@ -1655,6 +1655,7 @@ var perlite = (function (exports) {
 
     const svg = (strings, ...values) => new SVGTemplateResult(strings, values, 'svg', defaultTemplateProcessor);
 
+    const unrender = (target) => render(nothing, target);
     const noop = (...args) => { };
     const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
     const memo = (fn, invalidate) => {
@@ -3333,14 +3334,14 @@ var perlite = (function (exports) {
             subtree: false
         });
         const destroy = (cb = noop) => {
-            emit('destroy', model);
             observer.disconnect();
             dispose$1(renderer);
             effects.forEach((cancel) => cancel());
             effects.clear();
+            emit('destroy', model);
             events.forEach((off) => off());
             events.clear();
-            target.innerHTML = '';
+            unrender(target);
             cb(model);
         };
         const ctx = (fn) => fn(...context);
@@ -3444,6 +3445,7 @@ var perlite = (function (exports) {
     exports.templateContent = templateContent;
     exports.templateFactory = templateFactory;
     exports.tick = tick;
+    exports.unrender = unrender;
     exports.unsafeHTML = unsafeHTML;
     exports.unsafeSVG = unsafeSVG;
     exports.until = until;

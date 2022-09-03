@@ -1,7 +1,7 @@
 import hr from 'hyperactiv';
 import { render, nothing } from 'lit-html';
 
-import { attrToVal, camelCase, kebabCase, noop } from './utils';
+import { attrToVal, camelCase, kebabCase, noop, unrender } from './utils';
 
 import type * as Type from './types';
 
@@ -112,14 +112,14 @@ export const $ = (
     });
 
     const destroy = (cb = noop) => {
-        emit('destroy', model);
         observer.disconnect();
         dispose(renderer);
         effects.forEach((cancel: () => void) => cancel());
         effects.clear();
+        emit('destroy', model);
         events.forEach((off: () => void) => off());
         events.clear();
-        target.innerHTML = ''; // is this the best way to clean up the DOM?
+        unrender(target);
         cb(model);
     };
 

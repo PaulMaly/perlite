@@ -1,3 +1,7 @@
+import { render, nothing } from 'lit-html';
+
+export const unrender = (target: Element | DocumentFragment) => render(nothing, target);
+
 export const noop = (...args: any[]) => { };
 
 export const tick = (fn: (() => any) = noop): Promise<undefined> => new Promise((resolve) => setTimeout(resolve)).then(fn);
