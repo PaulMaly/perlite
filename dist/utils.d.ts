@@ -1,4 +1,4 @@
-export declare const noop: () => void;
+export declare const noop: (...args: any[]) => void;
 export declare const tick: (fn?: (() => any)) => Promise<undefined>;
 export declare const memo: (fn: (...args: any[]) => any, invalidate?: (...args: any[]) => any) => (...args: any[]) => any;
 export declare function attrToVal(str: string): any;

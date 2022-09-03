@@ -1,7 +1,7 @@
 import hr from 'hyperactiv';
 import { render, nothing } from 'lit-html';
 
-import { attrToVal, camelCase, kebabCase } from './utils';
+import { attrToVal, camelCase, kebabCase, noop } from './utils';
 
 import type * as Type from './types';
 
@@ -23,7 +23,7 @@ export const $ = (
     }: Type.Config,
     ...context
 ): Type.Widget => {
-    const model = (typeof data === 'function') ? data(...context) : data;
+    const model: {} = (typeof data === 'function') ? data(...context) : data;
 
     Object.entries(target.dataset).forEach(([key, value]) => {
         if (key in model) model[key] = attrToVal(value);
@@ -111,7 +111,8 @@ export const $ = (
         subtree: false
     });
 
-    const destroy = () => {
+    const destroy = (cb = noop) => {
+        emit('destroy', model);
         observer.disconnect();
         dispose(renderer);
         effects.forEach((cancel: () => void) => cancel());
@@ -119,7 +120,7 @@ export const $ = (
         events.forEach((off: () => void) => off());
         events.clear();
         target.innerHTML = ''; // is this the best way to clean up the DOM?
-        emit('destroy', model);
+        cb(model);
     };
 
     const ctx = (fn: (...ctx: any[]) => any) => fn(...context);
@@ -155,7 +156,7 @@ export const $$ = ({ target, ...config }: Type.Configs, ...context): Type.Widget
             const offs = widgets.map((widget: Type.Widget) => widget.on(...args));
             return () => offs.forEach(off => off());
         },
-        destroy: (): void => widgets.forEach((widget: Type.Widget) => widget.destroy()),
+        destroy: (cb): void => widgets.forEach((widget: Type.Widget) => widget.destroy(cb)),
         render: (): void => widgets.forEach((widget: Type.Widget) => widget.render()),
         state: (fn: (state: ProxyConstructor) => void): void => {
             widgets.forEach((widget: Type.Widget) => fn(widget.state))

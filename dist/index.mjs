@@ -16,7 +16,7 @@ export * from 'lit-html/directives/template-content';
 export * from 'lit-html/directives/unsafe-html';
 export * from 'lit-html/directives/unsafe-svg';
 
-const noop = () => { };
+const noop = (...args) => { };
 const tick = (fn = noop) => new Promise((resolve) => setTimeout(resolve)).then(fn);
 const memo = (fn, invalidate) => {
     const cache = new Map();
@@ -298,7 +298,8 @@ const $ = ({ render: template = () => nothing, state: data = {}, target = docume
         childList: false,
         subtree: false
     });
-    const destroy = () => {
+    const destroy = (cb = noop) => {
+        emit('destroy', model);
         observer.disconnect();
         dispose(renderer);
         effects.forEach((cancel) => cancel());
@@ -306,7 +307,7 @@ const $ = ({ render: template = () => nothing, state: data = {}, target = docume
         events.forEach((off) => off());
         events.clear();
         target.innerHTML = '';
-        emit('destroy', model);
+        cb(model);
     };
     const ctx = (fn) => fn(...context);
     return {
@@ -337,7 +338,7 @@ const $$ = ({ target, ...config }, ...context) => {
             const offs = widgets.map((widget) => widget.on(...args));
             return () => offs.forEach(off => off());
         },
-        destroy: () => widgets.forEach((widget) => widget.destroy()),
+        destroy: (cb) => widgets.forEach((widget) => widget.destroy(cb)),
         render: () => widgets.forEach((widget) => widget.render()),
         state: (fn) => {
             widgets.forEach((widget) => fn(widget.state));

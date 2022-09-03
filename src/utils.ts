@@ -1,4 +1,4 @@
-export const noop = () => { };
+export const noop = (...args: any[]) => { };
 
 export const tick = (fn: (() => any) = noop): Promise<undefined> => new Promise((resolve) => setTimeout(resolve)).then(fn);
 
